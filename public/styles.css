@@ -839,7 +839,7 @@ body ::selection {
 }
 
 .template-card strong {
-  font-family: "Fraunces", Georgia, serif;
+  font-family: "Libre Baskerville", Georgia, serif;
   font-size: 1rem;
   line-height: 1.08;
 }
@@ -1332,7 +1332,7 @@ summary:focus-visible {
 
 .history-item strong,
 .library-card h2 {
-  font-family: "Fraunces", Georgia, serif;
+  font-family: "Libre Baskerville", Georgia, serif;
   font-size: 1.1rem;
 }
 
@@ -1401,7 +1401,7 @@ progress::-moz-progress-bar {
 }
 
 .signal-stack article strong {
-  font-family: "Fraunces", Georgia, serif;
+  font-family: "Libre Baskerville", Georgia, serif;
   font-size: 1.28rem;
   color: var(--text);
 }
