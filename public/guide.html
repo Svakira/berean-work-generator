@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Studio Berean - Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="site-shell page-guide">
+      <header class="guide-topbar">
+        <div class="plain-link plain-link-arrow"><span aria-hidden="true">&larr;</span><a href="/generator">Back to generator</a></div>
+        <div class="guide-topbar-actions">
+          <p class="eyebrow">Guide workspace</p>
+          <button class="theme-icon-button" type="button" aria-label="Switch to dark theme" title="Switch to dark theme">
+            <span class="theme-icon theme-icon-sun" aria-hidden="true">☼</span>
+            <span class="theme-icon theme-icon-moon" aria-hidden="true">◐</span>
+          </button>
+        </div>
+      </header>
+
+      <section class="guide-hero">
+        <div>
+          <h1 id="guide-title">Guide viewer</h1>
+          <p id="guide-subtitle" class="section-copy">Open a saved guide from the generator history.</p>
+        </div>
+      </section>
+
+      <section class="guide-grid">
+        <article id="guide-view" class="guide-reading-surface">
+          <div class="empty-state">
+            <h2>No guide selected</h2>
+            <p>Generate a worksheet or workbook first, then open it from the generator history.</p>
+          </div>
+        </article>
+
+        <aside class="guide-sidebar">
+          <section class="panel">
+            <div class="panel-head compact-head">
+              <p class="eyebrow">Export</p>
+              <h2>Take the guide with you.</h2>
+            </div>
+            <div class="action-stack">
+              <button id="guide-print-pdf" type="button" class="btn btn-primary btn-block">Export PDF</button>
+              <button id="guide-download-md" type="button" class="btn btn-subtle btn-block">Download Markdown</button>
+              <button id="guide-download-html" type="button" class="btn btn-subtle btn-block">Download HTML</button>
+              <button id="guide-copy-md" type="button" class="text-button text-button-block">Copy Markdown</button>
+            </div>
+          </section>
+
+          <section class="panel panel-soft">
+            <div class="panel-head compact-head">
+              <p class="eyebrow">Guide utilities</p>
+              <h2>Version and comparison tools.</h2>
+            </div>
+            <div class="action-stack compact-stack">
+              <button id="guide-reflect-berean" type="button" class="btn btn-primary btn-block">Reflect with Berean</button>
+              <button id="guide-copy-reflection" type="button" class="btn btn-subtle btn-block">Copy reflection prompt</button>
+              <button id="guide-save-version" type="button" class="btn btn-subtle btn-block">Save new version</button>
+              <button id="guide-pin" type="button" class="btn btn-subtle btn-block">Pin guide</button>
+              <button id="guide-delete" type="button" class="text-button text-button-block">Delete guide</button>
+            </div>
+            <label class="field-label">
+              Compare with another version
+              <select id="guide-compare-select">
+                <option value="">Select a version</option>
+              </select>
+            </label>
+            <button id="guide-compare-run" type="button" class="btn btn-subtle btn-block">Compare versions</button>
+            <div id="guide-compare-output" class="compare-output">
+              <p>No comparison loaded.</p>
+            </div>
+          </section>
+
+          <details class="detail-block" open>
+            <summary>Trace summary</summary>
+            <ol id="guide-trace-steps" class="trace-list"></ol>
+            <details class="detail-block inner-detail">
+              <summary>Prompts sent to Berean</summary>
+              <pre id="guide-trace-prompts">No prompts yet.</pre>
+            </details>
+            <details class="detail-block inner-detail">
+              <summary>Answer preview</summary>
+              <pre id="guide-trace-preview">No answer preview yet.</pre>
+            </details>
+            <pre id="guide-meta-view" class="meta-view">No data yet.</pre>
+          </details>
+        </aside>
+      </section>
+
+      <footer class="site-footer">
+        <div>
+          <a class="site-brand footer-brand" href="/">Studio Berean</a>
+          <p class="footer-copy">Reading-first guide export with version history, comparison, and Berean trace kept close but quiet.</p>
+        </div>
+        <div class="footer-links">
+          <a href="/generator">Generator</a>
+          <a href="/templates">Templates</a>
+          <a href="https://berean.ai" target="_blank" rel="noreferrer">Ask Berean</a>
+        </div>
+      </footer>
+    </main>
+    <script type="module" src="/site.js"></script>
+    <script type="module" src="/guide.js"></script>
+  </body>
+</html>

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Studio Berean - Template Library</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="site-shell page-templates">
+      <header class="site-header site-header-tight">
+        <a class="site-brand" href="/">Studio Berean</a>
+        <div class="site-header-tools">
+          <nav class="site-nav" aria-label="Primary">
+            <a href="/generator">Generator</a>
+            <a href="/templates" aria-current="page">Templates</a>
+            <a href="https://berean.ai" target="_blank" rel="noreferrer">Berean.ai</a>
+          </nav>
+          <button class="theme-icon-button" type="button" aria-label="Switch to dark theme" title="Switch to dark theme">
+            <span class="theme-icon theme-icon-sun" aria-hidden="true">☼</span>
+            <span class="theme-icon theme-icon-moon" aria-hidden="true">◐</span>
+          </button>
+        </div>
+      </header>
+
+      <section class="page-header-block">
+        <div class="plain-link plain-link-arrow"><span aria-hidden="true">&larr;</span><a href="/generator">Back to generator</a></div>
+        <p class="eyebrow">Template Library</p>
+        <h1>Browse ready-made study templates.</h1>
+        <p class="lede">Open a template directly in the generator, inspect its prompt, copy it, or download it for later use.</p>
+      </section>
+
+      <section class="library-toolbar">
+        <label>
+          Search templates
+          <input id="template-search" type="search" placeholder="Search by title, audience, or topic" />
+        </label>
+        <label>
+          Filter audience
+          <select id="template-filter">
+            <option value="all">All audiences</option>
+          </select>
+        </label>
+      </section>
+
+      <section id="template-library-grid" class="template-library-grid"></section>
+
+      <footer class="site-footer">
+        <div>
+          <a class="site-brand footer-brand" href="/">Studio Berean</a>
+          <p class="footer-copy">Ready-made workbook prompts for students, teachers, families, and ministry contexts.</p>
+        </div>
+        <div class="footer-links">
+          <a href="/generator">Generator</a>
+          <a href="/">Home</a>
+          <a href="https://berean.ai" target="_blank" rel="noreferrer">Ask Berean</a>
+        </div>
+      </footer>
+    </main>
+    <script type="module" src="/site.js"></script>
+    <script type="module" src="/templates.js"></script>
+  </body>
+</html>

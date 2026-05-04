@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Studio Berean - Generator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="site-shell page-generator">
+      <header class="site-header site-header-tight">
+        <a class="site-brand" href="/">Studio Berean</a>
+        <div class="site-header-tools">
+          <nav class="site-nav" aria-label="Primary">
+            <a href="/">Home</a>
+            <a href="/generator" aria-current="page">Generator</a>
+            <a href="/templates">Templates</a>
+          </nav>
+          <button class="theme-icon-button" type="button" aria-label="Switch to dark theme" title="Switch to dark theme">
+            <span class="theme-icon theme-icon-sun" aria-hidden="true">☼</span>
+            <span class="theme-icon theme-icon-moon" aria-hidden="true">◐</span>
+          </button>
+        </div>
+      </header>
+
+      <section class="workspace-hero">
+        <div class="workspace-hero-main">
+          <p class="eyebrow">Generator workspace</p>
+          <h1>Build a study with a clear brief, then generate with confidence.</h1>
+          <p class="lede">The main surface is for shaping the study. Templates, saved guides, and system tools stay visible without fighting the brief itself.</p>
+        </div>
+        <figure class="generator-hero-image-frame">
+          <img class="generator-hero-image" src="/hero-reading.png" alt="A woman reading the Bible on a couch in a softly lit room." width="1024" height="1024" decoding="async" fetchpriority="high" />
+        </figure>
+        <section class="generator-quickstart">
+          <p class="eyebrow">Quick start</p>
+          <ol class="generator-quickstart-list">
+            <li>
+              <span>1</span>
+              <div>
+                <strong>Pick a starting point</strong>
+                <p>Choose a visible template or open the full template library.</p>
+              </div>
+            </li>
+            <li>
+              <span>2</span>
+              <div>
+                <strong>Shape the brief</strong>
+                <p>Write the prompt directly or use Study Coach if you need structure.</p>
+              </div>
+            </li>
+            <li>
+              <span>3</span>
+              <div>
+                <strong>Generate and review</strong>
+                <p>Create the workbook, then open the saved guide and export it.</p>
+              </div>
+            </li>
+          </ol>
+        </section>
+      </section>
+
+      <section class="template-band">
+        <div class="band-head">
+          <div>
+            <p class="eyebrow">Template library</p>
+            <p id="template-status" class="band-copy">Choose a visible template or use the + shortcut to open the full library.</p>
+          </div>
+          <p class="band-copy">Selected: <strong id="preset-label">Custom</strong></p>
+        </div>
+        <div id="premade-list" class="template-strip" aria-label="Visible templates"></div>
+      </section>
+
+      <section class="service-band">
+        <div class="service-context">
+          <p class="eyebrow">Service + context</p>
+          <div class="service-pills">
+            <span class="service-pill"><span id="service-status-dot" class="status-dot dot-warn"></span><span id="service-status-text">Checking...</span></span>
+            <span class="service-pill">Preset loaded</span>
+            <span class="service-pill">Trace enabled</span>
+          </div>
+        </div>
+        <div class="service-actions">
+          <a id="open-berean" class="utility-link utility-link-accent" href="https://berean.ai" target="_blank" rel="noreferrer">Ask a question</a>
+          <a class="utility-link" href="/templates">Open template library</a>
+        </div>
+      </section>
+
+      <section class="workspace-grid">
+        <aside class="rail rail-left">
+          <section class="panel">
+            <div class="panel-head">
+              <p class="eyebrow">Study Coach</p>
+              <h2>Shape the brief when needed.</h2>
+            </div>
+            <div class="field-stack">
+              <label>Topic / lesson context<textarea id="coach-lesson" rows="2" placeholder="What did you teach or what topic are you covering?"></textarea></label>
+              <label>Desired outcome<textarea id="coach-outcome" rows="2" placeholder="What should learners understand spiritually?"></textarea></label>
+              <label>Anchor scriptures<textarea id="coach-scriptures" rows="2" placeholder="Which Scriptures matter most?"></textarea></label>
+              <label>Questions to include<textarea id="coach-questions" rows="3" placeholder="What questions should they wrestle with?"></textarea></label>
+              <label>Sensitive context<textarea id="coach-sensitive" rows="2" placeholder="Any pastoral note or sensitivity?"></textarea></label>
+            </div>
+            <div class="inline-actions">
+              <button id="coach-build" type="button" class="btn btn-subtle">Build study brief</button>
+              <button id="coach-clear" type="button" class="text-button">Clear</button>
+            </div>
+          </section>
+        </aside>
+
+        <section class="builder-column">
+          <section class="builder-panel">
+            <div class="panel-head">
+              <p class="eyebrow">Main brief builder</p>
+              <h2>Write the title and prompt, then refine settings only if needed.</h2>
+              <p class="panel-copy">The study brief is the center of gravity for this page.</p>
+            </div>
+
+            <form id="generator-form" class="builder-form">
+              <input id="preset-id" name="presetId" type="hidden" value="" />
+              <input id="lesson-context" name="lessonContext" type="hidden" value="" />
+              <input id="desired-outcome" name="desiredOutcome" type="hidden" value="" />
+              <input id="anchor-scriptures" name="anchorScriptures" type="hidden" value="" />
+              <input id="custom-questions" name="customQuestions" type="hidden" value="" />
+              <input id="sensitivities" name="sensitivities" type="hidden" value="" />
+
+              <div class="field-stack field-stack-wide">
+                <label>Guide title<input id="title" name="title" required value="Workbook: Philippians 4:6-7" /></label>
+                <label>Your prompt<textarea id="theme" name="theme" rows="6" required>Philippians 4:6-7 and anxiety</textarea></label>
+              </div>
+
+              <div class="config-grid">
+                <label>Format<select id="content-format" name="contentFormat"><option value="worksheet">Worksheet</option><option value="workbook">Workbook</option></select></label>
+                <label>Audience<select id="audience" name="audience"><option value="student">Student</option><option value="teacher">Teacher / Leader</option></select></label>
+                <label>Level<select id="level" name="level"><option value="beginner">Beginner</option><option value="intermediate">Intermediate</option><option value="advanced">Advanced</option></select></label>
+                <label>Duration<input id="duration" name="duration" value="45 minutes" /></label>
+              </div>
+
+              <details id="teacher-advanced" class="teacher-builder" hidden>
+                <summary>Teacher build settings</summary>
+                <div class="config-grid config-grid-two">
+                  <label>Workbook type<select id="workbook-type" name="workbookType"><option value="session_worksheet">Session Worksheet</option><option value="weekly_plan">Weekly Plan</option><option value="discipleship_track">Discipleship Track</option></select></label>
+                  <label>Timeframe<select id="timeframe" name="timeframe"><option value="single_session">Single Session</option><option value="4_weeks">4 Weeks</option><option value="8_weeks">8 Weeks</option><option value="3_months">3 Months</option></select></label>
+                </div>
+                <div class="field-stack">
+                  <label>Prior studies<input id="prior-studies" name="priorStudies" /></label>
+                  <label>Books to use<input id="source-books" name="sourceBooks" /></label>
+                  <label>Themes to reinforce<textarea id="reinforce-topics" name="reinforceTopics" rows="2"></textarea></label>
+                  <label>Teacher annotations<textarea id="annotations" name="annotations" rows="2"></textarea></label>
+                  <label>Improvement focus<textarea id="improvement-focus" name="improvementFocus" rows="2"></textarea></label>
+                </div>
+              </details>
+
+              <div id="brief-preview" class="preview-panel">
+                <strong>Study brief preview</strong>
+                <p>Use Study Coach to build a structured brief or write your own prompt directly.</p>
+              </div>
+
+              <div class="builder-footer">
+                <p id="status" class="status-line">Ready.</p>
+                <button id="generate" type="submit" class="btn btn-primary btn-large">Generate workbook</button>
+              </div>
+            </form>
+          </section>
+        </section>
+
+        <aside class="rail rail-right">
+          <section class="panel panel-muted">
+            <div class="panel-head compact-head">
+              <p class="eyebrow">Recent guides</p>
+              <h2>Saved versions</h2>
+            </div>
+            <div id="history-summary" class="history-summary-panel">
+              <strong>No recent guide yet.</strong>
+              <p>Your latest generated guide will appear here.</p>
+            </div>
+            <div id="history-list" class="history-list"></div>
+          </section>
+
+          <section class="panel panel-soft">
+            <div class="panel-head compact-head">
+              <p class="eyebrow">Progress & quality</p>
+              <h2><span id="quality-overall">0/100</span></h2>
+            </div>
+            <div class="progress-meter">
+              <div class="progress-meta"><span>Session progress</span><strong id="progress-label">0%</strong></div>
+              <progress id="session-progress" max="100" value="0"></progress>
+            </div>
+            <div class="signal-inline">
+              <article><span>Streak</span><strong id="study-streak">0 days</strong></article>
+              <article><span>Sessions</span><strong id="session-count">0</strong></article>
+            </div>
+            <div id="progress-tasks" class="checklist"></div>
+            <ul id="quality-feedback" class="feedback-list"></ul>
+            <p id="perk-message" class="panel-copy">Complete your checklist to unlock a celebration.</p>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head compact-head">
+              <p class="eyebrow">Trace summary</p>
+              <h2>What Berean saw</h2>
+            </div>
+            <p id="berean-summary" class="panel-copy">This generator uses BEREAN's research engine and can build studies from templates or custom coaching input.</p>
+            <ol id="trace-steps" class="trace-list"></ol>
+            <details class="detail-block">
+              <summary>Prompt trace</summary>
+              <pre id="trace-prompts">No prompts yet.</pre>
+            </details>
+            <details class="detail-block">
+              <summary>Response preview</summary>
+              <pre id="trace-preview">No answer preview yet.</pre>
+            </details>
+          </section>
+        </aside>
+      </section>
+
+      <footer class="site-footer">
+        <div>
+          <a class="site-brand footer-brand" href="/">Studio Berean</a>
+          <p class="footer-copy">A calmer workspace for building traceable Bible studies with practical pastoral structure.</p>
+        </div>
+        <div class="footer-links">
+          <a href="/">Home</a>
+          <a href="/templates">Templates</a>
+          <a href="https://berean.ai" target="_blank" rel="noreferrer">Ask Berean</a>
+        </div>
+      </footer>
+    </main>
+    <script type="module" src="/site.js"></script>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

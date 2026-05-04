@@ -1,0 +1,154 @@
+<h2>Section 2 Revision: Inline `+` With Templates</h2>
+<p class="subtitle">Moví el botón `+` para que quede inmediatamente a la derecha de la última card visible de template. Ahora se lee como una extensión directa de la biblioteca.</p>
+
+<div class="section">
+  <div class="mockup">
+    <div class="mockup-header">Preview: template row with inline library expansion</div>
+    <div class="mockup-body">
+      <div style="background:#fcfcfb;color:#203244;border-radius:20px;padding:22px 28px 26px;box-shadow:0 24px 68px rgba(43,71,109,.08);display:grid;gap:18px;">
+        <div style="display:grid;gap:8px;border-bottom:1px solid rgba(76,101,126,.12);padding-bottom:14px;">
+          <div style="font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#56afe2;">Generator workspace</div>
+          <div style="display:flex;justify-content:space-between;gap:16px;align-items:end;flex-wrap:wrap;">
+            <div style="display:grid;gap:6px;max-width:720px;">
+              <div style="font-family:Georgia,serif;font-size:32px;line-height:1.08;color:#17324b;">Build a study with a clear brief, then generate with confidence.</div>
+              <div style="font-size:14px;line-height:1.6;color:#5c6d7f;">The top area is now split into clearer bands: one for template selection and one for service context and quick actions.</div>
+            </div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+              <div style="padding:9px 14px;border:1px solid rgba(76,101,126,.16);border-radius:999px;font-size:12px;background:white;">Student</div>
+              <div style="padding:9px 14px;background:#56afe2;color:#f8fcff;border-radius:999px;font-size:12px;box-shadow:0 8px 20px rgba(86,175,226,.20);">Teacher</div>
+              <div style="padding:9px 14px;border:1px solid rgba(76,101,126,.16);border-radius:999px;font-size:12px;background:white;">Dark mode</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:grid;gap:16px;">
+          <div style="display:grid;gap:10px;padding-bottom:16px;border-bottom:1px solid rgba(76,101,126,.10);">
+            <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;">
+              <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#56afe2;">Template library</div>
+              <div style="font-size:13px;color:#627487;">Selected template: <strong style="color:#17324b;">Teen anxiety & identity</strong></div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:stretch;overflow:hidden;">
+              <div style="min-width:176px;background:#ecf7fe;border:1px solid rgba(86,175,226,.22);border-radius:14px;padding:14px;display:grid;gap:6px;box-shadow:0 10px 24px rgba(86,175,226,.10);">
+                <div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#2f8dc4;">Teens</div>
+                <div style="font-family:Georgia,serif;font-size:18px;line-height:1.1;color:#18324a;">Anxiety & identity</div>
+              </div>
+              <div style="min-width:176px;background:#f7f7f4;border:1px solid rgba(76,101,126,.08);border-radius:14px;padding:14px;display:grid;gap:6px;">
+                <div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#7d694e;">Kids</div>
+                <div style="font-family:Georgia,serif;font-size:18px;line-height:1.1;color:#273748;">Fear at night</div>
+              </div>
+              <div style="min-width:176px;background:#f7f7f4;border:1px solid rgba(76,101,126,.08);border-radius:14px;padding:14px;display:grid;gap:6px;">
+                <div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#7d694e;">Marriage</div>
+                <div style="font-family:Georgia,serif;font-size:18px;line-height:1.1;color:#273748;">Trust & healing</div>
+              </div>
+              <div style="min-width:56px;width:56px;display:grid;place-items:center;border-radius:16px;background:#56afe2;color:white;font-size:32px;line-height:1;box-shadow:0 12px 24px rgba(86,175,226,.24);">+</div>
+            </div>
+            <div style="font-size:11px;color:#64778a;">The `+` opens the full template library on a separate page.</div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;">
+            <div style="display:grid;gap:10px;">
+              <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#56afe2;">Service + context</div>
+              <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;color:#5d6f81;font-size:13px;">
+                <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:#f7fbfe;border:1px solid rgba(86,175,226,.12);border-radius:999px;"><span style="width:10px;height:10px;border-radius:999px;background:#2f8e66;display:inline-block;"></span>Berean available</div>
+                <div style="padding:8px 12px;background:white;border:1px solid rgba(76,101,126,.10);border-radius:999px;">Preset loaded</div>
+                <div style="padding:8px 12px;background:white;border:1px solid rgba(76,101,126,.10);border-radius:999px;">Trace enabled</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;">
+              <div style="padding:10px 16px;background:#56afe2;color:#f8fcff;border-radius:999px;font-size:13px;box-shadow:0 10px 22px rgba(86,175,226,.22);white-space:nowrap;">Ask a question</div>
+              <div style="padding:10px 16px;border:1px solid rgba(76,101,126,.14);border-radius:999px;font-size:13px;background:white;color:#51677d;white-space:nowrap;">Open latest guide</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:260px minmax(0,1fr) 260px;gap:18px;align-items:start;">
+          <div style="display:grid;gap:14px;">
+            <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#56afe2;">Left rail</div>
+            <div style="background:white;border:1px solid rgba(76,101,126,.08);border-radius:16px;padding:14px;display:grid;gap:10px;">
+              <div style="font-family:Georgia,serif;font-size:18px;color:#1d3247;">Study Coach</div>
+              <div style="font-size:13px;line-height:1.55;color:#627487;">Brief-building help stays available, but no longer overwhelms the main form.</div>
+              <div style="height:34px;background:#f5f7f9;border-radius:10px;"></div>
+              <div style="height:34px;background:#f5f7f9;border-radius:10px;"></div>
+              <div style="height:52px;background:#f5f7f9;border-radius:10px;"></div>
+            </div>
+            <div style="background:white;border:1px solid rgba(76,101,126,.08);border-radius:16px;padding:14px;display:grid;gap:8px;">
+              <div style="font-family:Georgia,serif;font-size:17px;color:#1d3247;">Recent guides</div>
+              <div style="height:26px;background:#f4f6f8;border-radius:10px;"></div>
+              <div style="height:26px;background:#f4f6f8;border-radius:10px;"></div>
+              <div style="height:26px;background:#f4f6f8;border-radius:10px;"></div>
+            </div>
+          </div>
+
+          <div style="display:grid;gap:14px;">
+            <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#56afe2;">Main composition area</div>
+            <div style="background:white;border:1px solid rgba(86,175,226,.12);border-radius:18px;padding:18px;display:grid;gap:14px;box-shadow:0 12px 26px rgba(86,175,226,.06);">
+              <div style="display:grid;gap:10px;">
+                <div style="height:16px;background:#9ad0ef;border-radius:999px;width:34%;"></div>
+                <div style="height:52px;background:#f3fbff;border-radius:12px;"></div>
+                <div style="height:116px;background:#f3fbff;border-radius:14px;"></div>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">
+                <div style="height:62px;background:#f6fbfe;border-radius:12px;border:1px solid rgba(86,175,226,.08);"></div>
+                <div style="height:62px;background:#f6fbfe;border-radius:12px;border:1px solid rgba(86,175,226,.08);"></div>
+                <div style="height:62px;background:#f6fbfe;border-radius:12px;border:1px solid rgba(86,175,226,.08);"></div>
+                <div style="height:62px;background:#f6fbfe;border-radius:12px;border:1px solid rgba(86,175,226,.08);"></div>
+              </div>
+              <div style="display:grid;gap:10px;padding-top:4px;border-top:1px solid rgba(76,101,126,.10);">
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+                  <div style="font-family:Georgia,serif;font-size:19px;color:#1d3247;">Study brief preview</div>
+                  <div style="font-size:12px;color:#62778d;">Built from coach inputs and selected preset</div>
+                </div>
+                <div style="height:92px;background:#fafcfd;border-radius:14px;border:1px solid rgba(76,101,126,.08);"></div>
+                <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;">
+                  <div style="font-size:13px;color:#62778d;">One clear primary action at the bottom of the working surface.</div>
+                  <div style="padding:12px 18px;background:#56afe2;color:#f8fcff;border-radius:999px;font-size:13px;box-shadow:0 12px 24px rgba(86,175,226,.22);">Generate workbook</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:grid;gap:14px;">
+            <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#56afe2;">Right rail</div>
+            <div style="background:white;border:1px solid rgba(76,101,126,.08);border-radius:16px;padding:14px;display:grid;gap:10px;">
+              <div style="font-family:Georgia,serif;font-size:18px;color:#1d3247;">Build settings</div>
+              <div style="height:42px;background:#f5f7f9;border-radius:10px;"></div>
+              <div style="height:42px;background:#f5f7f9;border-radius:10px;"></div>
+              <div style="height:42px;background:#f5f7f9;border-radius:10px;"></div>
+              <div style="height:42px;background:#f5f7f9;border-radius:10px;"></div>
+            </div>
+            <div style="background:#f7fbfe;border:1px solid rgba(86,175,226,.12);border-radius:16px;padding:14px;display:grid;gap:8px;">
+              <div style="font-family:Georgia,serif;font-size:17px;color:#1d3247;">Progress & quality</div>
+              <div style="height:8px;background:#77c0ec;border-radius:999px;width:64%;"></div>
+              <div style="height:28px;background:white;border-radius:10px;"></div>
+              <div style="height:28px;background:white;border-radius:10px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="options">
+  <div class="option" data-choice="generator-v5-yes" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Sí, así va</h3>
+      <p>El `+` ya está donde debe estar.</p>
+    </div>
+  </div>
+  <div class="option" data-choice="generator-v5-tighter" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Bien, pero más pegado</h3>
+      <p>Acércalo todavía más visualmente a la última card.</p>
+    </div>
+  </div>
+  <div class="option" data-choice="generator-v5-other" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Bien, pero hay otro ajuste</h3>
+      <p>La fila de templates va bien, pero quiero tocar otra cosa.</p>
+    </div>
+  </div>
+</div>

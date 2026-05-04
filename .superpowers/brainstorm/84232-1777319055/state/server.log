@@ -1,0 +1,10 @@
+{"type":"server-started","port":62517,"host":"127.0.0.1","url_host":"localhost","url":"http://localhost:62517","screen_dir":"/Users/svak/berean-workbook-mvp/.superpowers/brainstorm/84232-1777319055/content","state_dir":"/Users/svak/berean-workbook-mvp/.superpowers/brainstorm/84232-1777319055/state"}
+{"type":"screen-added","file":"/Users/svak/berean-workbook-mvp/.superpowers/brainstorm/84232-1777319055/content/generator-structure-v6.html"}
+{"type":"screen-added","file":"/Users/svak/berean-workbook-mvp/.superpowers/brainstorm/84232-1777319055/content/generator-lower-layout.html"}
+{"type":"screen-added","file":"/Users/svak/berean-workbook-mvp/.superpowers/brainstorm/84232-1777319055/content/generator-lower-layout-v2.html"}
+{"type":"screen-added","file":"/Users/svak/berean-workbook-mvp/.superpowers/brainstorm/84232-1777319055/content/guide-layout.html"}
+{"type":"screen-added","file":"/Users/svak/berean-workbook-mvp/.superpowers/brainstorm/84232-1777319055/content/guide-layout-v2.html"}
+{"type":"screen-added","file":"/Users/svak/berean-workbook-mvp/.superpowers/brainstorm/84232-1777319055/content/guide-layout-v3.html"}
+{"type":"screen-added","file":"/Users/svak/berean-workbook-mvp/.superpowers/brainstorm/84232-1777319055/content/guide-layout-v4.html"}
+{"type":"screen-added","file":"/Users/svak/berean-workbook-mvp/.superpowers/brainstorm/84232-1777319055/content/guide-layout-v5.html"}
+{"type":"server-stopped","reason":"idle timeout"}

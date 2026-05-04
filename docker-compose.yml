@@ -1,0 +1,7 @@
+services:
+  studio-berean:
+    build: .
+    container_name: studio-berean
+    ports:
+      - "4173:4173"
+    restart: unless-stopped
