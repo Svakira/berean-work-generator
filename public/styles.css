@@ -1740,6 +1740,22 @@ code {
     gap: 16px;
   }
 
+  .page-generator .workspace-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .page-generator .builder-column {
+    order: -1;
+  }
+
+  .page-generator .rail-left {
+    order: 0;
+  }
+
+  .page-generator .rail-right {
+    order: 1;
+  }
+
   .page-home .hero-block,
   .home-overview,
   .home-final,
@@ -1833,5 +1849,13 @@ code {
 
   .template-strip {
     grid-auto-columns: minmax(138px, 1fr);
+  }
+
+  .brand-berean {
+    font-size: 1.3rem;
+  }
+
+  .brand-studio {
+    font-size: 0.55rem;
   }
 }
