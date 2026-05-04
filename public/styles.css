@@ -1859,3 +1859,29 @@ code {
     font-size: 0.55rem;
   }
 }
+
+@media print {
+  .site-header,
+  .guide-topbar,
+  .guide-hero,
+  .guide-sidebar,
+  .site-footer,
+  .page-back-link {
+    display: none !important;
+  }
+
+  .guide-grid {
+    display: block;
+  }
+
+  .guide-reading-surface {
+    border: none;
+    box-shadow: none;
+    padding: 0;
+  }
+
+  body {
+    background: white;
+    color: black;
+  }
+}
