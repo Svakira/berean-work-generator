@@ -905,6 +905,20 @@ body ::selection {
   gap: 30px;
 }
 
+.generator-page-header {
+  display: grid;
+  gap: 6px;
+  padding: 20px 0 4px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 4px;
+}
+
+.generator-page-header h1 {
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  line-height: 1.12;
+  max-width: 24ch;
+}
+
 .page-generator .workspace-hero h1 {
   max-width: 16.5ch;
   font-size: clamp(1.9rem, 3vw, 2.8rem);
