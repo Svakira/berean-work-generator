@@ -520,6 +520,10 @@ body ::selection {
   padding: 18px 0 0;
 }
 
+.continue-hidden {
+  display: none;
+}
+
 .home-overview {
   grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
   gap: 40px;

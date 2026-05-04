@@ -24,4 +24,8 @@ if (latest) {
     continueLinkEl.textContent = "Open Latest Guide";
     continueLinkEl.href = `/guide?id=${encodeURIComponent(latest.id)}`;
   }
+  const continuePanel = document.getElementById('continue-panel');
+  if (continuePanel) {
+    continuePanel.classList.remove('continue-hidden');
+  }
 }
