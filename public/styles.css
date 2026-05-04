@@ -125,6 +125,14 @@ body ::selection {
   border-bottom: 1px solid var(--line);
 }
 
+.site-header-tight {
+  padding-top: 0;
+}
+
+.page-back-link {
+  padding: 8px 0 0;
+}
+
 .site-header-tools,
 .guide-topbar-actions,
 .footer-links,
