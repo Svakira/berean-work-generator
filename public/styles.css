@@ -436,7 +436,7 @@ body ::selection {
 }
 
 .page-home {
-  gap: 34px;
+  gap: 28px;
 }
 
 .page-home .section-band {
@@ -501,6 +501,11 @@ body ::selection {
   gap: 4px;
   padding-top: 12px;
   border-top: 1px solid var(--line);
+  transition: border-color 150ms ease;
+}
+
+.hero-side-list article:hover {
+  border-top-color: var(--accent);
 }
 
 .hero-side-list article:first-child {
@@ -885,6 +890,18 @@ body ::selection {
   background: #ecf7fe;
   border-color: rgba(86, 175, 226, 0.28);
   box-shadow: 0 8px 18px rgba(86, 175, 226, 0.08);
+}
+
+[data-theme="dark"] .template-card.active {
+  background: rgba(103, 194, 241, 0.12);
+  border-color: rgba(103, 194, 241, 0.35);
+}
+
+.home-final-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
 }
 
 .template-card__eyebrow {
