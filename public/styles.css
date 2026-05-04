@@ -530,24 +530,60 @@ body ::selection {
 }
 
 /* Hero redesign — navy with SVG illustration */
-.home-hero {
+.home-hero-wrap {
   background: var(--navy-hero);
   border-radius: var(--radius-xl);
-  padding: 52px 48px 44px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Decorative circles */
+.home-hero-wrap::before {
+  content: "";
+  position: absolute;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+  right: -40px;
+  bottom: -60px;
+  pointer-events: none;
+}
+
+.home-hero-wrap::after {
+  content: "";
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: rgba(86,175,226,0.08);
+  right: 160px;
+  top: -60px;
+  pointer-events: none;
+}
+
+.site-header-in-hero {
+  background: transparent;
+  border-color: rgba(255,255,255,0.1);
+  padding: 20px 32px 16px;
+  margin: 0;
+  border-radius: 0;
+}
+
+.home-hero {
+  padding: 8px 32px 48px;
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 32px;
   align-items: center;
   position: relative;
-  overflow: hidden;
+  z-index: 1;
+  background: transparent;
+  border-radius: 0;
 }
 
 .home-hero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse at 70% 50%, rgba(86,175,226,0.12) 0%, transparent 65%);
-  pointer-events: none;
+  display: none;
 }
 
 .home-hero .eyebrow {
@@ -571,7 +607,7 @@ body ::selection {
 }
 
 .home-hero-illustration {
-  width: 200px;
+  width: 240px;
   flex-shrink: 0;
   position: relative;
   z-index: 1;
@@ -580,7 +616,36 @@ body ::selection {
 }
 
 .home-hero .hero-actions {
-  margin-top: 4px;
+  margin-top: 8px;
+  display: grid;
+  gap: 10px;
+  max-width: 340px;
+}
+
+.btn-hero-cta {
+  background: var(--accent);
+  color: #f0faff;
+  box-shadow: 0 12px 28px rgba(86,175,226,0.35);
+  padding: 13px 20px;
+  font-size: 1rem;
+  font-weight: 700;
+  justify-content: center;
+}
+
+.btn-hero-secondary {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.22);
+  color: rgba(255,255,255,0.85);
+  padding: 13px 20px;
+  font-size: 1rem;
+  font-weight: 700;
+  justify-content: center;
+  border-radius: 999px;
+}
+
+.btn-hero-secondary:hover {
+  background: rgba(255,255,255,0.18);
+  transform: translateY(-1px);
 }
 
 .home-hero .btn-primary {
@@ -606,10 +671,16 @@ body ::selection {
 @media (max-width: 680px) {
   .home-hero {
     grid-template-columns: 1fr;
-    padding: 36px 28px 32px;
+    padding: 12px 24px 40px;
   }
   .home-hero-illustration {
     display: none;
+  }
+  .site-header-in-hero {
+    padding: 16px 24px 12px;
+  }
+  .home-hero .hero-actions {
+    max-width: 100%;
   }
 }
 
