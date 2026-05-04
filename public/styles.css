@@ -378,6 +378,14 @@ body ::selection {
   width: 100%;
 }
 
+.btn[disabled],
+.btn[aria-busy="true"] {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  pointer-events: none;
+}
+
 .text-button {
   background: transparent;
   border: 0;
