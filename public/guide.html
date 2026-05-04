@@ -79,7 +79,10 @@
               <button id="guide-copy-reflection" type="button" class="btn btn-subtle btn-block">Copy reflection prompt</button>
               <button id="guide-save-version" type="button" class="btn btn-subtle btn-block">Save new version</button>
               <button id="guide-pin" type="button" class="btn btn-subtle btn-block">Pin guide</button>
-              <button id="guide-delete" type="button" class="text-button text-button-block">Delete guide</button>
+              <details class="danger-action-detail">
+                <summary>Danger zone</summary>
+                <button id="guide-delete" type="button" class="text-button text-button-block guide-delete-btn">Delete this guide</button>
+              </details>
             </div>
             <label class="field-label">
               Compare with another version
@@ -93,7 +96,7 @@
             </div>
           </section>
 
-          <details class="detail-block" open>
+          <details class="detail-block">
             <summary>Trace summary</summary>
             <ol id="guide-trace-steps" class="trace-list"></ol>
             <details class="detail-block inner-detail">

@@ -845,6 +845,18 @@ body ::selection {
   background: var(--danger);
 }
 
+.danger-action-detail summary {
+  cursor: pointer;
+  color: var(--danger);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.guide-delete-btn {
+  color: var(--danger);
+  margin-top: 8px;
+}
+
 .template-strip {
   grid-auto-flow: column;
   grid-auto-columns: minmax(148px, 180px);
