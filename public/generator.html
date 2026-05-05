@@ -119,14 +119,17 @@
                 <!-- Main fields -->
                 <div class="gen-form-body">
                   <div class="gen-field-group">
-                    <label class="gen-field-label" for="title">Guide title</label>
-                    <input class="gen-input" id="title" name="title" required value="Workbook: Philippians 4:6-7" />
+                    <label class="gen-field-label" for="theme">Your prompt</label>
+                    <textarea class="gen-textarea" id="theme" name="theme" rows="4" required placeholder="e.g. Philippians 4:6-7 and anxiety, grief and hope, identity in Christ..."></textarea>
                   </div>
 
-                  <div class="gen-field-group">
-                    <label class="gen-field-label" for="theme">Your prompt</label>
-                    <textarea class="gen-textarea" id="theme" name="theme" rows="4" required>Philippians 4:6-7 and anxiety</textarea>
-                  </div>
+                  <details class="gen-title-collapse">
+                    <summary class="gen-title-summary">+ Add custom title <span class="gen-title-hint">(optional — auto-generated from your prompt)</span></summary>
+                    <div class="gen-field-group gen-title-field">
+                      <label class="gen-field-label" for="title">Guide title</label>
+                      <input class="gen-input" id="title" name="title" value="" placeholder="e.g. Workbook: Philippians 4:6-7" />
+                    </div>
+                  </details>
                 </div>
 
                 <!-- Config row — separated section with subtle bg -->
@@ -142,7 +145,7 @@
                     <div class="gen-field-group">
                       <label class="gen-field-label" for="audience">Audience</label>
                       <select class="gen-select" id="audience" name="audience">
-                        <option value="student">Student</option>
+                        <option value="personal">Personal</option>
                         <option value="teacher">Teacher / Leader</option>
                       </select>
                     </div>
@@ -156,7 +159,11 @@
                     </div>
                     <div class="gen-field-group">
                       <label class="gen-field-label" for="duration">Duration</label>
-                      <input class="gen-input" id="duration" name="duration" value="45 minutes" />
+                      <select class="gen-select" id="duration" name="duration">
+                        <option value="20 minutes">20 min</option>
+                        <option value="40 minutes" selected>40 min</option>
+                        <option value="60 minutes">60 min</option>
+                      </select>
                     </div>
                   </div>
                 </div>
@@ -175,6 +182,14 @@
                     <label>Improvement focus<textarea id="improvement-focus" name="improvementFocus" rows="2"></textarea></label>
                   </div>
                 </details>
+
+                <!-- Brief preview — shown before Study Coach -->
+                <div class="gen-brief-section">
+                  <div id="brief-preview" class="gen-brief-preview">
+                    <p class="gen-brief-label">Study brief</p>
+                    <p>Fill in the prompt above or use Study Coach to add pastoral context.</p>
+                  </div>
+                </div>
 
                 <!-- Study Coach — collapsible section -->
                 <div class="gen-coach-section">
@@ -209,25 +224,17 @@
                         <textarea class="gen-textarea gen-textarea-sm" id="coach-sensitive" rows="2" placeholder="Any pastoral note or sensitivity?"></textarea>
                       </div>
                       <div class="gen-coach-actions">
-                        <button id="coach-build" type="button" class="btn btn-subtle">Build study brief</button>
+                        <button id="coach-build" type="button" class="btn btn-subtle">Apply to prompt</button>
                         <button id="coach-clear" type="button" class="text-button">Clear</button>
                       </div>
                     </div>
                   </details>
                 </div>
 
-                <!-- Brief preview -->
-                <div class="gen-brief-section">
-                  <div id="brief-preview" class="gen-brief-preview">
-                    <p class="gen-brief-label">Study brief</p>
-                    <p>Use Study Coach to build a structured brief or write your own prompt directly.</p>
-                  </div>
-                </div>
-
                 <!-- Footer -->
                 <div class="gen-form-footer">
                   <p id="status" class="status-line">Ready.</p>
-                  <button id="generate" type="submit" class="btn btn-primary btn-large">Generate workbook →</button>
+                  <button id="generate" type="submit" class="btn btn-primary btn-large">Generate →</button>
                 </div>
               </form>
             </section>

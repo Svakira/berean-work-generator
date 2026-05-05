@@ -2892,6 +2892,33 @@ body.body-gen .site-header-tools {
   border-radius: 12px 12px 0 0;
 }
 
+/* Optional title collapse */
+.gen-title-collapse {
+  margin-top: -4px;
+}
+
+.gen-title-summary {
+  font-size: 0.78rem;
+  color: var(--accent-strong);
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.gen-title-summary::-webkit-details-marker { display: none; }
+
+.gen-title-hint {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.gen-title-field {
+  margin-top: 10px;
+}
+
 .gen-form-divider {
   height: 1px;
   background: var(--line);
