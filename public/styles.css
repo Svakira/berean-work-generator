@@ -568,13 +568,6 @@ body {
   gap: 40px;
 }
 
-.home-hero-main,
-.home-hero-side,
-.hero-side-list,
-.home-overview,
-.home-overview-columns,
-.home-flow,
-.home-flow-row,
 .continue-inline {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
@@ -584,6 +577,32 @@ body {
   background: var(--pastel-blue);
   border-radius: var(--radius-md);
   border: 1px solid rgba(86,175,226,0.18);
+}
+
+.home-hero-main {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+  z-index: 1;
+}
+
+.home-overview,
+.home-flow {
+  display: grid;
+  gap: 20px;
+}
+
+.home-overview-columns {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.home-flow-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
 }
 
 .continue-inline h2 {
@@ -692,12 +711,6 @@ body {
   max-width: 55ch;
 }
 
-.home-hero-main {
-  gap: 16px;
-  position: relative;
-  z-index: 1;
-}
-
 .home-hero-illustration {
   width: 100%;
   max-width: 360px;
@@ -762,18 +775,62 @@ body {
 }
 
 @media (max-width: 680px) {
+  /* Hero */
   .home-hero {
     grid-template-columns: 1fr;
-    padding: 12px 24px 40px;
+    padding: 12px 20px 40px;
   }
   .home-hero-illustration {
     display: none;
   }
   .site-header-in-hero {
-    padding: 16px 24px 12px;
+    padding: 14px 20px 12px;
   }
   .home-hero .hero-actions {
     max-width: 100%;
+  }
+  .home-hero h1 {
+    font-size: 2.2rem;
+    max-width: 100%;
+  }
+  .home-hero .lede {
+    font-size: 1rem;
+    max-width: 100%;
+  }
+
+  /* Nav: hide links on mobile, keep brand + theme toggle */
+  .site-header-in-hero .site-nav {
+    display: none;
+  }
+
+  /* Overview & flow: single column */
+  .home-overview-columns {
+    grid-template-columns: 1fr;
+  }
+  .home-flow-row {
+    grid-template-columns: 1fr;
+  }
+
+  /* Continue inline: stack vertically */
+  .continue-inline {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  /* Home final: stack */
+  .home-final {
+    gap: 16px;
+    text-align: center;
+  }
+  .home-final a {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Section padding */
+  .home-overview,
+  .home-flow {
+    padding: 28px 0 8px;
   }
 }
 
@@ -3463,4 +3520,62 @@ body.body-gen .site-header-tools {
 @media (max-width: 600px) {
   .gen-sidebar { display: none; }
   .gen-config-row { grid-template-columns: 1fr; }
+
+  /* Hide nav links in top navbar — too cramped on mobile */
+  body.body-gen .site-nav {
+    display: none;
+  }
+
+  /* Template strip: shrink cards on mobile */
+  .gen-template-strip .template-card {
+    max-width: 140px !important;
+    width: 140px !important;
+  }
+
+  /* Template row: reduce padding */
+  .gen-template-row {
+    padding: 10px 12px !important;
+    gap: 10px !important;
+  }
+
+  /* Topbar: smaller label */
+  .gen-topbar {
+    padding: 10px 16px;
+  }
+
+  /* Form col: tighter padding */
+  .gen-form-col {
+    padding: 14px 14px 20px;
+  }
+}
+
+/* ── Home page: reduce gap between sections on mobile ── */
+@media (max-width: 680px) {
+  .page-home {
+    gap: 0;
+  }
+
+  .home-overview {
+    padding: 28px 20px 16px;
+  }
+
+  .home-flow {
+    padding: 28px 20px 32px;
+  }
+
+  .home-dark-bottom .home-final {
+    padding: 32px 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .home-dark-bottom .home-final a {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .home-dark-bottom .site-footer {
+    padding: 20px;
+  }
 }
