@@ -2788,8 +2788,9 @@ body.body-gen .site-header-tools {
   pointer-events: none;
 }
 
-/* Show first 2 template chips, hide the rest */
-.gen-template-strip > *:nth-child(n+3) {
+/* Show first 2 template chips, hide the rest — use high specificity to beat inline-flex override */
+.gen-template-strip .template-card:nth-child(n+3),
+.gen-template-strip .template-card--more {
   display: none !important;
 }
 
@@ -3182,7 +3183,7 @@ body.body-gen .site-header-tools {
 }
 
 .gen-right-section {
-  padding: 12px 14px;
+  padding: 12px 20px;
   border-bottom: 1px solid var(--line);
   display: flex;
   flex-direction: column;
