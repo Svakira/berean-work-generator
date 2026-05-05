@@ -346,7 +346,7 @@ function safeSummarySentence(theme, text, audience = "student", intent = {}) {
       .replace(/^to\s+/i, "");
     const aimSentence = audience === "teacher"
       ? `This study helps the group ${normalizedAim}.`
-      : `This study helps the student ${normalizedAim}.`;
+      : `This study helps you ${normalizedAim}.`;
     return aimSentence.charAt(0).toUpperCase() + aimSentence.slice(1);
   }
 
@@ -403,8 +403,31 @@ function worksheetQuestionBlocks(questions) {
 }
 
 function focusStatement(theme, pastoralAnswer, intent = {}) {
-  const sentence = safeSummarySentence(theme, pastoralAnswer, "student", intent);
-  return sentence || cleanInline(theme);
+  const cleanTheme = cleanInline(theme);
+
+  // If a pastoral aim is available, shape a declarative biblical truth from it
+  if (intent?.pastoralAim) {
+    const aim = cleanInline(intent.pastoralAim)
+      .replace(/^help the student\s+/i, "")
+      .replace(/^help the group\s+/i, "")
+      .replace(/^to\s+/i, "");
+    // Build a "God calls us to..." or "Scripture invites us to..." statement
+    return `Scripture calls us to ${aim}.`;
+  }
+
+  // Otherwise build from the first meaningful clause of the pastoral answer
+  const raw = firstSentence(pastoralAnswer, "");
+  const stripped = raw
+    .replace(/[,:;\-\s]+$/g, "")
+    .replace(/^(This study|This worksheet|The study|The goal)\s+\w+\s+/i, "")
+    .trim();
+
+  if (stripped && stripped.length >= 24 && stripped.length <= 160) {
+    return /[.!?]$/.test(stripped) ? stripped : `${stripped}.`;
+  }
+
+  // Fallback: a short, direct statement from the theme
+  return `${cleanTheme.charAt(0).toUpperCase() + cleanTheme.slice(1)} is a call to trust God's Word and walk in obedience.`;
 }
 
 function teacherFocusStatement(theme, pastoralAnswer, intent = {}) {
@@ -687,7 +710,7 @@ export function buildWorkbook({
         type: "reading",
         title: "Reading",
         content: [
-          `The following is a biblical study of ${cleanInline(theme)}. Read it carefully and mark insights as you go.`,
+          `Take your time with this. Read slowly, and mark anything that stands out.`,
           "",
           sanitizeGeneratedText(scholarAnswer)
         ].join("\n")

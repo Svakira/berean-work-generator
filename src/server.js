@@ -2,6 +2,7 @@ import express from "express";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { askBereanPastoral, askBereanScholar } from "./bereanClient.js";
+import { generateStudyContent } from "./qwenClient.js";
 import { buildWorkbook, workbookToMarkdown, evaluateWorkbookQuality } from "./workbookEngine.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -398,11 +399,6 @@ export function createServerApp() {
   }
 
   try {
-    // Build rich, focused question for Berean Scholar (single API call to preserve rate limit: 20/day per IP)
-    const formatInstruction = effectiveFormat === "worksheet"
-      ? "Focus on key practical insights a student can immediately apply in daily life."
-      : "Provide a thorough biblical exposition with enough depth for a learner to read, analyze, and draw their own conclusions from.";
-
     const coachParts = [
       input.lessonContext ? `Lesson context: ${input.lessonContext}.` : "",
       input.desiredOutcome ? `Desired spiritual outcome: ${input.desiredOutcome}.` : "",
@@ -411,15 +407,10 @@ export function createServerApp() {
       input.sensitivities ? `Pastoral note: ${input.sensitivities}.` : ""
     ].filter(Boolean).join(" ");
 
-    const audienceNote = input.audience === "teacher"
-      ? `for group leaders preparing a ${input.level} session`
-      : `for a ${input.level} individual learner`;
-
-    const scholarQuestion = [
+    // Berean Scholar question (for citations/sources — conserves daily rate limit: 20/day/IP)
+    const bereanQuestion = [
       preset?.prompt ||
-        `What does Scripture teach about "${effectiveTheme}"? ${formatInstruction}`,
-      `This is ${audienceNote} with approximately ${input.duration} available.`,
-      `Include the most relevant Bible passages and their meaning in context, 4 to 6 key spiritual insights or theological points, and at least one practical application for real life.`,
+        `What Bible passages and scholarly sources are most relevant to "${effectiveTheme}"? List key scriptures and their context.`,
       coachParts
     ].filter(Boolean).join(" ");
 
@@ -431,20 +422,54 @@ export function createServerApp() {
       intent: input.intent
     });
 
-    // Single Berean Scholar call (conserves daily rate limit: 20 requests/day/IP)
-    let scholarData;
-    let warning = null;
+    // Run Qwen (content generation) and Berean (citations) in parallel
+    let qwenResult = null;
+    let bereanData = null;
+    let qwenWarning = null;
+    let bereanWarning = null;
 
-    try {
-      scholarData = await askBereanScholar(scholarQuestion);
-    } catch (err) {
-      scholarData = localFallback.scholar;
-      warning = `Scholar request fallback: ${String(err?.message || "unknown error")}`;
+    const [qwenOutcome, bereanOutcome] = await Promise.allSettled([
+      generateStudyContent({
+        theme: effectiveTheme,
+        format: effectiveFormat,
+        audience: input.audience,
+        level: input.level,
+        duration: input.duration,
+        lessonContext: input.lessonContext,
+        desiredOutcome: input.desiredOutcome,
+        anchorScriptures: input.anchorScriptures,
+        customQuestions: input.customQuestions.length ? input.customQuestions.join(" | ") : "",
+        sensitivities: input.sensitivities
+      }),
+      askBereanScholar(bereanQuestion)
+    ]);
+
+    if (qwenOutcome.status === "fulfilled") {
+      qwenResult = qwenOutcome.value;
+    } else {
+      qwenWarning = `Qwen generation fallback: ${String(qwenOutcome.reason?.message || "unknown error")}`;
     }
 
-    // Pastoral summary derived locally from scholar response (no second API call)
+    if (bereanOutcome.status === "fulfilled") {
+      bereanData = bereanOutcome.value;
+    } else {
+      bereanWarning = `Berean citation fallback: ${String(bereanOutcome.reason?.message || "unknown error")}`;
+    }
+
+    // scholarData: use Qwen content as the answer (rich LLM content),
+    // but keep Berean sources for traceability. Fallback to localFallback if both fail.
+    const scholarData = {
+      answer: qwenResult?.content || localFallback.scholar?.answer || "No content generated.",
+      sources: bereanData?.sources || [],
+      model: qwenResult ? `Qwen3 + Berean (citations)` : "local-fallback",
+      elapsed_ms: qwenResult?.elapsed_ms || null,
+      sources_count: bereanData?.sources_count || 0
+    };
+
     const pastoralData = localFallback.pastoral;
-    const mode = warning ? "hybrid" : "berean";
+
+    const warning = [qwenWarning, bereanWarning].filter(Boolean).join("; ") || null;
+    const mode = qwenResult ? (bereanData ? "qwen+berean" : "qwen-only") : "hybrid";
 
     const sourceCollections = Array.isArray(scholarData?.sources)
       ? [...new Set(scholarData.sources.map((s) => s.collection).filter(Boolean))]
@@ -478,19 +503,24 @@ export function createServerApp() {
         mode,
         steps: [
           "Input normalized locally",
-          "Single prompt sent to BEREAN /api/v1/scholar (rate limit: 20/day/IP)",
-          "Pastoral summary derived locally from intent data",
-          "Workbook composed from scholar response",
+          "Qwen3-30B-A3B (TotalGPT) generated study content",
+          "BEREAN /api/v1/scholar provided biblical citations (rate limit: 20/day/IP)",
+          "Workbook composed from Qwen content with Berean sources",
           "Sources filtered and attached for Berean traceability"
         ],
         prompts: {
-          scholar: scholarQuestion
+          scholar: bereanQuestion
         },
         berean: {
-          scholarModel: scholarData?.model || "unknown",
-          scholarElapsedMs: scholarData?.elapsed_ms || null,
-          scholarSourcesCount: scholarData?.sources_count || 0,
+          scholarModel: bereanData?.model || "unknown",
+          scholarElapsedMs: bereanData?.elapsed_ms || null,
+          scholarSourcesCount: bereanData?.sources_count || 0,
           sourceCollections
+        },
+        qwen: {
+          model: qwenResult?.model || "Qwen-Qwen3-30B-A3B",
+          elapsed_ms: qwenResult?.elapsed_ms || null,
+          tokens: qwenResult?.tokens || null
         },
         answerPreview: {
           scholar: String(scholarData?.answer || "").slice(0, 700)
