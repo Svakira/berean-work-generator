@@ -197,6 +197,14 @@ function buildGenericIntent(rawTheme, combinedTokens) {
   };
 }
 
+function generateTitleFromTheme(theme) {
+  const t = String(theme || "").trim();
+  if (!t) return "Bible Study Guide";
+  const clean = t.replace(/\s+/g, " ").replace(/[^\w\s,.:'-]/g, "").trim();
+  const capped = clean.charAt(0).toUpperCase() + clean.slice(1);
+  return `Study Guide: ${capped.slice(0, 80)}`;
+}
+
 export function normalizeStudyRequest({ title = "", theme = "" }) {
   const rawTitle = String(title || "").trim();
   const rawTheme = String(theme || "").trim();
@@ -312,7 +320,7 @@ function normalizeInput(body) {
   return {
     audience: body?.audience === "teacher" ? "teacher" : "student",
     contentFormat: body?.contentFormat === "worksheet" ? "worksheet" : "workbook",
-    title: String(normalizedStudy.title || "Bible Study Workbook").trim().slice(0, 120),
+    title: String(normalizedStudy.title || generateTitleFromTheme(String(body?.theme || ""))).trim().slice(0, 120),
     theme: String(normalizedStudy.theme || "Biblical topic").trim().slice(0, 1200),
     intent: normalizedStudy.intent || buildGenericIntent(String(body?.theme || "Biblical topic"), tokenizeTopic(String(body?.theme || "Biblical topic"))),
     level: String(body?.level || "beginner").trim().slice(0, 60),
@@ -390,32 +398,31 @@ export function createServerApp() {
   }
 
   try {
-    const teacherContext = input.audience === "teacher"
-      ? `Teacher planning context: workbook type=${input.teacherPlan.workbookType}; timeframe=${input.teacherPlan.timeframe}; prior studies=${input.teacherPlan.priorStudies.join(" | ") || "none"}; books=${input.teacherPlan.sourceBooks.join(" | ") || "none"}; reinforcement themes=${input.teacherPlan.reinforceTopics.join(" | ") || "none"}; notes=${input.teacherPlan.annotations || "none"}; improvements=${input.teacherPlan.improvementFocus || "none"}.`
-      : "";
-    const coachContext = [
+    // Build rich, focused question for Berean Scholar (single API call to preserve rate limit: 20/day per IP)
+    const formatInstruction = effectiveFormat === "worksheet"
+      ? "Focus on key practical insights a student can immediately apply in daily life."
+      : "Provide a thorough biblical exposition with enough depth for a learner to read, analyze, and draw their own conclusions from.";
+
+    const coachParts = [
       input.lessonContext ? `Lesson context: ${input.lessonContext}.` : "",
-      input.desiredOutcome ? `Desired outcome: ${input.desiredOutcome}.` : "",
-      input.anchorScriptures ? `Anchor scriptures: ${input.anchorScriptures}.` : "",
-      input.sensitivities ? `Sensitive context: ${input.sensitivities}.` : "",
-      input.customQuestions.length ? `Use these discussion/reflection questions explicitly if possible: ${input.customQuestions.join(" | ")}.` : ""
+      input.desiredOutcome ? `Desired spiritual outcome: ${input.desiredOutcome}.` : "",
+      input.anchorScriptures ? `Please include these anchor Scriptures: ${input.anchorScriptures}.` : "",
+      input.customQuestions.length ? `Also address these questions: ${input.customQuestions.join(" | ")}.` : "",
+      input.sensitivities ? `Pastoral note: ${input.sensitivities}.` : ""
     ].filter(Boolean).join(" ");
 
-    const formatContext = effectiveFormat === "worksheet"
-      ? "Format this as a concise printable student worksheet with a short reading, key spiritual idea, practical real-life application, and reflection questions with answer space. Avoid long academic paragraphs."
-      : "Format this as a fuller workbook with sections for reading, analysis, reflection, application, and follow-up. Keep it structured and readable.";
+    const audienceNote = input.audience === "teacher"
+      ? `for group leaders preparing a ${input.level} session`
+      : `for a ${input.level} individual learner`;
 
-    const basePrompt = preset?.prompt || `Generate a practical, biblically faithful ${effectiveFormat} about ${effectiveTheme}.`;
+    const scholarQuestion = [
+      preset?.prompt ||
+        `What does Scripture teach about "${effectiveTheme}"? ${formatInstruction}`,
+      `This is ${audienceNote} with approximately ${input.duration} available.`,
+      `Include the most relevant Bible passages and their meaning in context, 4 to 6 key spiritual insights or theological points, and at least one practical application for real life.`,
+      coachParts
+    ].filter(Boolean).join(" ");
 
-    const scholarPrompt = `${basePrompt} ${formatContext} ${coachContext} Generate an academic biblical explanation for a ${input.level} audience. Keep it concise, clear, teachable, and practical for emotional and spiritual growth. Include Scripture references and 4 to 6 short insights useful for this study format. Return plain text only. Do not include markdown headings, workbook titles, numbered lesson shells, or decorative labels. Avoid repeating the prompt title verbatim unless necessary. ${teacherContext}`;
-    const pastoralPrompt = `${basePrompt} ${formatContext} ${coachContext} Generate a short pastoral introduction in clear English for ${input.audience === "teacher" ? "group leaders" : "students"}. Keep it compassionate, practical, spiritually grounded, and actionable in the real world. Return plain text only. Do not include markdown headings, decorative titles, or generic opening language like "as we embark on this journey". Write directly and naturally. ${teacherContext}`;
-
-    const results = await Promise.allSettled([
-      askBereanScholar(scholarPrompt),
-      askBereanPastoral(pastoralPrompt)
-    ]);
-
-    const warnings = [];
     const localFallback = buildLocalFallbackResponses({
       audience: input.audience,
       theme: effectiveTheme,
@@ -423,22 +430,21 @@ export function createServerApp() {
       contentFormat: effectiveFormat,
       intent: input.intent
     });
-    const scholarData = results[0].status === "fulfilled"
-      ? results[0].value
-      : localFallback.scholar;
 
-    const pastoralData = results[1].status === "fulfilled"
-      ? results[1].value
-      : localFallback.pastoral;
+    // Single Berean Scholar call (conserves daily rate limit: 20 requests/day/IP)
+    let scholarData;
+    let warning = null;
 
-    if (results[0].status === "rejected") {
-      warnings.push(`Scholar request fallback: ${String(results[0].reason?.message || "unknown error")}`);
-    }
-    if (results[1].status === "rejected") {
-      warnings.push(`Pastoral request fallback: ${String(results[1].reason?.message || "unknown error")}`);
+    try {
+      scholarData = await askBereanScholar(scholarQuestion);
+    } catch (err) {
+      scholarData = localFallback.scholar;
+      warning = `Scholar request fallback: ${String(err?.message || "unknown error")}`;
     }
 
-    const mode = warnings.length === 0 ? "berean" : warnings.length === 1 ? "hybrid" : "fallback";
+    // Pastoral summary derived locally from scholar response (no second API call)
+    const pastoralData = localFallback.pastoral;
+    const mode = warning ? "hybrid" : "berean";
 
     const sourceCollections = Array.isArray(scholarData?.sources)
       ? [...new Set(scholarData.sources.map((s) => s.collection).filter(Boolean))]
@@ -461,7 +467,7 @@ export function createServerApp() {
       workbook,
       markdown: workbookToMarkdown(workbook),
       cache: "miss",
-      warning: warnings.length ? warnings.join(" | ") : null,
+      warning,
       telemetry: {
         scholarModel: scholarData?.model || "unknown",
         scholarElapsedMs: scholarData?.elapsed_ms || null,
@@ -472,14 +478,13 @@ export function createServerApp() {
         mode,
         steps: [
           "Input normalized locally",
-          "Prompt sent to BEREAN /api/v1/scholar",
-          "Prompt sent to BEREAN /api/v1/question",
-          "Workbook composed from scholar + pastoral responses",
-          "Sources filtered and attached for transparency"
+          "Single prompt sent to BEREAN /api/v1/scholar (rate limit: 20/day/IP)",
+          "Pastoral summary derived locally from intent data",
+          "Workbook composed from scholar response",
+          "Sources filtered and attached for Berean traceability"
         ],
         prompts: {
-          scholar: scholarPrompt,
-          pastoral: pastoralPrompt
+          scholar: scholarQuestion
         },
         berean: {
           scholarModel: scholarData?.model || "unknown",
@@ -488,8 +493,7 @@ export function createServerApp() {
           sourceCollections
         },
         answerPreview: {
-          scholar: String(scholarData?.answer || "").slice(0, 700),
-          pastoral: String(pastoralData?.answer || "").slice(0, 700)
+          scholar: String(scholarData?.answer || "").slice(0, 700)
         }
       },
       quality: {
@@ -507,7 +511,7 @@ export function createServerApp() {
     res.status(isRateLimit ? 429 : 500).json({
       error: message,
       guidance: isRateLimit
-        ? "BEREAN daily limit reached. Retry tomorrow or use a different IP/network."
+        ? "BEREAN daily limit reached (20 requests/day per IP). Retry tomorrow or contact berean.ai for higher limits."
         : "Workbook generation failed. Try a narrower topic and run again."
     });
   }

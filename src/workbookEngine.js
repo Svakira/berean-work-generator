@@ -324,9 +324,9 @@ function practicalTools(theme, intent = {}) {
 
 function worksheetPurpose(theme, audience) {
   return [
-    `- Understand how Scripture speaks into ${cleanInline(theme)}.`,
-    `- Identify one spiritual truth you need to hold onto this week.`,
-    `- Take one practical step in real life, not just in reflection.${audience === "teacher" ? "" : ""}`
+    `- Understand what Scripture says about ${cleanInline(theme)} and why it matters.`,
+    `- Identify one spiritual truth to hold onto and act on this week.`,
+    `- Take one concrete, real-world step — not just reflection, but obedience.`
   ].join("\n");
 }
 
@@ -374,19 +374,19 @@ function safeSummarySentence(theme, text, audience = "student", intent = {}) {
 function worksheetQuestions(audience, theme) {
   if (audience === "teacher") {
     return [
-      `What is the clearest spiritual need underneath ${theme}?`,
-      "What truth from Scripture should shape the whole session?",
-      "Where will your group struggle to obey this in real life?",
-      "What one exercise can move this from conversation into practice?"
+      `What is the clearest spiritual need underneath the topic of ${theme}?`,
+      "What single truth from Scripture should anchor the whole session?",
+      "Where will the group struggle most to obey this in their daily lives?",
+      "What one exercise can move this from conversation into real practice?"
     ];
   }
 
   return [
-    `What part of ${theme} feels most real in your life right now?`,
-    "What truth from Scripture do you need to believe more deeply this week?",
-    "What fear, pressure, or lie needs to be replaced with truth?",
-    "What one real-world step will you take before the next session?",
-    "What would trusting God in this area actually look like tomorrow?"
+    `Looking back at this past week — where did ${theme} show up in your daily life?`,
+    `What part of this topic feels most real or most difficult for you right now?`,
+    "What truth from Scripture do you need to believe more fully this week?",
+    "What fear, pressure, or lie is this study helping you confront?",
+    "What is one real-world step you can take before the next time you study?"
   ];
 }
 
@@ -430,8 +430,8 @@ function buildQuestions(audience, theme, customQuestions = [], intent = {}) {
   if (Array.isArray(intent?.questionAngles) && intent.questionAngles.length) {
     const primaryAngle = String(intent.questionAngles[0] || "this situation").replace(/^pressure to /i, "");
     const pressureQuestion = /^pressure to /i.test(String(intent.questionAngles[0] || ""))
-      ? `Where do you feel the pressure to ${primaryAngle} most strongly?`
-      : `Where do you feel the most pressure around ${primaryAngle}?`;
+      ? `Thinking about this past week — where did you feel the pressure to ${primaryAngle} most strongly?`
+      : `Thinking about this past week — where did you feel the most pressure around ${primaryAngle}?`;
     if (audience === "teacher") {
       return [
         /^pressure to /i.test(String(intent.questionAngles[0] || ""))
@@ -444,22 +444,23 @@ function buildQuestions(audience, theme, customQuestions = [], intent = {}) {
 
     return [
       pressureQuestion,
-      "What guilt are you carrying that may not actually belong to you?",
-      "What would peaceful communication with both parents look like?",
-      "What healthy boundary would help you stay truthful and calm?"
+      "What guilt or responsibility are you carrying that may not actually belong to you?",
+      "What would peaceful, truthful obedience look like in this situation this week?",
+      "What healthy boundary or step forward would help you stay grounded and calm?"
     ];
   }
 
   const studentQuestions = [
-    "Which verse or sentence speaks most directly to your current situation?",
-    "What fear, pressure, or lie is this worksheet helping you confront?",
-    "What will you do differently in the real world this week because of this truth?"
+    `Looking back at this past week — where did ${cleanInline(theme)} show up in your daily life?`,
+    "Which verse or sentence in this study speaks most directly to your current situation?",
+    "What fear, pressure, or false belief is this study helping you recognize and replace?",
+    "What will you do differently in the real world this week because of what you read here?"
   ];
 
   const teacherQuestions = [
-    `What is the clearest spiritual takeaway your group needs from ${theme}?`,
-    "Where might your group struggle to apply this in real life?",
-    "What concrete practice can move this lesson from discussion into obedience?"
+    `What is the clearest spiritual takeaway your group needs from this study on ${cleanInline(theme)}?`,
+    "Where might your group struggle most to apply this teaching in real life?",
+    "What concrete practice can move this lesson from discussion into lived obedience?"
   ];
 
   return audience === "teacher" ? teacherQuestions : studentQuestions;
@@ -601,70 +602,101 @@ export function buildWorkbook({
       type: "worksheet_intro",
       title: "Overview",
       content: [
-        `In this worksheet, we will explore how Scripture speaks to ${cleanInline(theme)} from a spiritual and practical point of view.`,
-        lessonContext ? `Lesson context: ${cleanInline(lessonContext)}` : null,
+        `This worksheet explores how Scripture speaks to ${cleanInline(theme)} from a spiritual and practical perspective.`,
+        lessonContext ? `Lesson context: ${cleanInline(lessonContext)}.` : null,
         safeSummarySentence(theme, pastoralAnswer, audience, intent),
         `Main Scripture: ${themeVerse(passages, intent)}.`
       ].filter(Boolean).join(" ")
     },
     {
       type: "worksheet_goals",
-      title: "What this worksheet will help you do",
+      title: "What this worksheet will help the learner do",
       content: worksheetPurpose(theme, audience)
     },
     {
+      type: "scripture_reading",
+      title: "Read and mark",
+      content: [
+        `Read the following passage(s) slowly. Underline or circle words that stand out.`,
+        "",
+        passageList,
+        "",
+        `After reading: What word or phrase did you notice first?`,
+        answerBlankLines(2)
+      ].join("\n")
+    },
+    {
+      type: "teaching_insight",
+      title: "What Scripture teaches here",
+      content: [
+        sentenceBullets(scholarAnswer, 4)
+      ].join("\n")
+    },
+    {
       type: "questions",
-      title: audience === "teacher" ? "Teacher reflection" : "Questions",
+      title: audience === "teacher" ? "Leader reflection questions" : "Reflection questions",
       content: worksheetQuestionBlocks(buildQuestions(audience, theme, customQuestions, intent))
     },
     {
       type: "worksheet_action",
       title: "Real-world application",
       content: [
-        "What should I practice in real life this week?",
+        "What will the learner practice in real life this week?",
         answerBlankLines(3),
         "",
         practicalTools(theme, intent)
       ].join("\n")
     },
     {
-      type: "reflection_prompt",
-      title: "Bring this reflection to Berean",
-      content: buildBereanReflectionPrompt(theme, audience, intent)
-    },
-    {
       type: "reflection",
-      title: "Prayer and next step",
+      title: "Prayer and commitment",
       content: [
-        "### Prayer",
         "Lord, renew my mind, steady my heart, and help me live this truth in everyday life.",
         "",
-        "### My next step",
+        "My one step this week:",
         "- [ ] __________________________________________",
         "- [ ] __________________________________________"
       ].join("\n")
+    },
+    {
+      type: "reflection_prompt",
+      title: "Continue with Berean",
+      content: buildBereanReflectionPrompt(theme, audience, intent)
     }
   ];
 
   const workbookSections = [
       {
         type: "focus",
-        title: "FOCUS",
+        title: "Focus",
         content: teacherFocusStatement(theme, pastoralAnswer, intent)
       },
       {
-        type: "start_here",
-        title: `“${themeVerse(passages, intent)}”`,
+        type: "anchor_verse",
+        title: "Anchor Scripture",
         content: [
-          "### Main text for this study",
-          firstPassages(passages)
+          firstPassages(passages),
+          "",
+          "Read this passage at least twice. The second time, read it aloud slowly.",
+          "",
+          "What word or phrase stands out?",
+          answerBlankLines(1)
+        ].join("\n")
+      },
+      {
+        type: "reading",
+        title: "Reading",
+        content: [
+          `The following is a biblical study of ${cleanInline(theme)}. Read it carefully and mark insights as you go.`,
+          "",
+          sanitizeGeneratedText(scholarAnswer)
         ].join("\n")
       },
       {
         type: "study_intro",
         title: "1. Why does this matter?",
         content: [
-          "Your answer",
+          "After reading — write your answer below:",
           answerBlankLines(2),
           "",
           safeSummarySentence(theme, pastoralAnswer, audience, intent)
@@ -674,17 +706,29 @@ export function buildWorkbook({
         type: "study",
         title: "2. What does Scripture reveal?",
         content: [
-          "Your answer",
-          answerBlankLines(2),
+          "Based on the reading above, what did Scripture show you? Write 2–3 key points in your own words:",
+          answerBlankLines(3),
           "",
-          distilledTeachingBullets(scholarAnswer, 5)
+          "Key insights from the reading:",
+          distilledTeachingBullets(scholarAnswer, 4)
+        ].join("\n")
+      },
+      {
+        type: "retrospective",
+        title: "3. Looking back — where has this been true in your life?",
+        content: [
+          `Reflect on the past week or month. Where did ${cleanInline(theme)} show up in your daily life?`,
+          answerBlankLines(3),
+          "",
+          "What was your natural response — and what would a biblical response have looked like?",
+          answerBlankLines(2)
         ].join("\n")
       },
       {
         type: "tools",
-        title: "3. How can this be lived in the real world?",
+        title: "4. How can this be lived in the real world?",
         content: [
-          "Your answer",
+          "Write one area of your life where this applies right now:",
           answerBlankLines(2),
           "",
           practicalTools(theme, intent)
@@ -692,40 +736,41 @@ export function buildWorkbook({
       },
       {
         type: "questions",
-        title: "How would you answer?",
+        title: "Discussion and reflection questions",
         content: [
           ...buildQuestions(audience, theme, customQuestions, intent).map((q) => `- ${q}\n${answerBlankLines(2)}`)
         ].join("\n")
       },
       {
         type: "activity",
-        title: "What to do this week",
+        title: "This week's practice",
         content: audience === "teacher"
           ? [
-              "- Review the main text with your group.",
-              "- Ask one heart-level question before teaching application.",
-              "- End with one practical commitment and a closing prayer."
+              "- Review the reading with your group and ask each member to share one thing they marked.",
+              "- Ask one heart-level question before moving to application.",
+              "- End with one practical group commitment and a closing prayer."
             ].join("\n")
           : [
-              "- Re-read the main text slowly.",
-              "- Write one change you need to make this week.",
-              "- Pray specifically for strength to obey.",
+              "- Re-read the anchor Scripture on three different days this week.",
+              "- Write one change you need to make as a result of this study.",
+              "- Share one takeaway with someone you trust.",
               answerBlankLines(2)
             ].join("\n")
       },
       {
         type: "reflection",
-        title: "Review",
+        title: "Review and commitment",
         content: [
-          "- Main truth from this study:",
+          "Main truth from this study:",
           answerBlankLines(1),
-          "- What I will practice before next session:",
-          answerBlankLines(1)
+          "What I will practice before the next session:",
+          answerBlankLines(1),
+          "Prayer: Lord, renew my mind, steady my heart, and help me live this truth in everyday life."
         ].join("\n")
       },
       {
         type: "reflection_prompt",
-        title: "Bring this reflection to Berean",
+        title: "Continue with Berean",
         content: buildBereanReflectionPrompt(theme, audience, intent)
       },
       ...teacherExtraSections
@@ -816,13 +861,16 @@ export function evaluateWorkbookQuality(workbook) {
     ? [
         sectionTypes.has("key_concept"),
         sectionTypes.has("worksheet_intro"),
+        sectionTypes.has("scripture_reading"),
         sectionTypes.has("questions"),
         sectionTypes.has("worksheet_action"),
         artifacts === 0
       ]
     : [
         sectionTypes.has("focus"),
+        sectionTypes.has("reading"),
         sectionTypes.has("study_intro"),
+        sectionTypes.has("retrospective"),
         sectionTypes.has("questions"),
         sectionTypes.has("activity"),
         artifacts === 0
@@ -832,23 +880,24 @@ export function evaluateWorkbookQuality(workbook) {
     ? [
         sectionTypes.has("key_concept"),
         sectionTypes.has("worksheet_goals"),
+        sectionTypes.has("scripture_reading"),
         sectionTypes.has("questions"),
-        avgSectionChars < 1200,
+        avgSectionChars < 1400,
         artifacts === 0
       ]
     : [
         sectionTypes.has("focus"),
-        sectionTypes.has("study_intro"),
+        sectionTypes.has("reading"),
         sectionTypes.has("questions"),
-        avgSectionChars < 1400,
+        avgSectionChars < 1600,
         artifacts === 0,
         !genericFocus
       ];
 
   const criticChecks = [
-    sections.length >= (format === "worksheet" ? 6 : 7),
+    sections.length >= (format === "worksheet" ? 7 : 9),
     sources.length >= 3,
-    format === "worksheet" ? sectionTypes.has("worksheet_intro") : sectionTypes.has("start_here"),
+    format === "worksheet" ? sectionTypes.has("scripture_reading") : sectionTypes.has("reading"),
     sectionTypes.has("questions"),
     relevantSources >= Math.min(2, sources.length),
     artifacts === 0

@@ -2915,6 +2915,10 @@ body.body-gen .site-header-tools {
   font-weight: 400;
 }
 
+.gen-title-when-open { display: none; }
+.gen-title-collapse[open] .gen-title-when-closed { display: none; }
+.gen-title-collapse[open] .gen-title-when-open { display: inline; color: var(--muted); }
+
 .gen-title-field {
   margin-top: 10px;
 }
@@ -3137,16 +3141,16 @@ body.body-gen .site-header-tools {
 .gen-brief-preview {
   background: #fdf6ec;
   border-left: 3px solid #f0b955;
-  margin: 12px 20px;
-  border-radius: 6px;
-  padding: 10px 14px;
+  margin: 6px 20px;
+  border-radius: 5px;
+  padding: 6px 12px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
 }
 
 .gen-brief-label {
-  font-size: 0.62rem;
+  font-size: 0.58rem;
   font-weight: 700;
   color: #b07800;
   text-transform: uppercase;
@@ -3154,9 +3158,9 @@ body.body-gen .site-header-tools {
 }
 
 .gen-brief-preview p {
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   color: var(--text);
-  line-height: 1.5;
+  line-height: 1.4;
   margin: 0;
 }
 

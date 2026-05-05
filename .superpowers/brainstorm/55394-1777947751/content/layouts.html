@@ -1,0 +1,236 @@
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "Segoe UI", system-ui, sans-serif; background: #f8f9fb; }
+  
+  .cards { display: flex; flex-direction: column; gap: 28px; padding: 8px 0; }
+  
+  .card { background: white; border-radius: 16px; overflow: hidden; border: 2px solid transparent; cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+  .card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.12); }
+  .card.selected { border-color: #56afe2; }
+
+  .card-body { padding: 16px 20px 20px; }
+  .card-body h3 { font-size: 1.05rem; font-weight: 700; color: #17324b; margin-bottom: 4px; }
+  .card-body p { font-size: 0.88rem; color: #6b7a8d; line-height: 1.5; }
+
+  /* Mockup styles shared */
+  .mock { font-size: 0; line-height: 0; }
+  .nav-bar { background: #17324b; height: 44px; display: flex; align-items: center; padding: 0 20px; gap: 16px; }
+  .nav-logo { background: white; opacity: 0.9; width: 80px; height: 14px; border-radius: 3px; }
+  .nav-links { display: flex; gap: 12px; margin-left: auto; }
+  .nav-link { background: white; opacity: 0.3; width: 48px; height: 10px; border-radius: 2px; }
+  .nav-link.active { opacity: 0.7; }
+
+  /* Option A — Two-column: form left, sidebar right */
+  .mock-a { display: grid; grid-template-columns: 1fr 280px; gap: 0; background: #f4f6f9; min-height: 280px; }
+  .mock-a-main { padding: 18px; display: flex; flex-direction: column; gap: 12px; }
+  .mock-a-page-title { height: 10px; background: #17324b; border-radius: 2px; width: 60%; opacity: 0.7; }
+  .mock-a-page-sub { height: 7px; background: #b0bcc8; border-radius: 2px; width: 40%; }
+  .mock-a-card { background: white; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  .mock-a-card-label { height: 7px; background: #8eafc5; border-radius: 2px; width: 35%; }
+  .mock-a-input { height: 28px; background: #f4f6f9; border-radius: 6px; border: 1px solid #dde3ea; }
+  .mock-a-textarea { height: 56px; background: #f4f6f9; border-radius: 6px; border: 1px solid #dde3ea; }
+  .mock-a-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .mock-a-select { height: 28px; background: #f4f6f9; border-radius: 6px; border: 1px solid #dde3ea; }
+  .mock-a-btn { height: 36px; background: #56afe2; border-radius: 8px; margin-top: 4px; }
+  .mock-a-sidebar { background: white; border-left: 1px solid #e6eaf0; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .mock-a-sidebar-section { background: #f4f7fb; border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 6px; }
+  .mock-a-sidebar-title { height: 7px; background: #8eafc5; border-radius: 2px; width: 50%; }
+  .mock-a-sidebar-line { height: 6px; background: #d5dce5; border-radius: 2px; }
+  .mock-a-sidebar-line.short { width: 70%; }
+  .mock-a-sidebar-tag { height: 20px; background: #e8f5ff; border-radius: 999px; width: 80px; }
+
+  /* Option B — Stepped wizard: one section at a time */
+  .mock-b { background: #f4f6f9; min-height: 280px; padding: 18px; display: flex; flex-direction: column; gap: 12px; }
+  .mock-b-steps { display: flex; gap: 0; align-items: center; }
+  .mock-b-step { display: flex; align-items: center; gap: 6px; }
+  .mock-b-dot { width: 24px; height: 24px; border-radius: 50%; background: #56afe2; display: flex; align-items: center; justify-content: center; }
+  .mock-b-dot-inner { width: 8px; height: 8px; background: white; border-radius: 50%; }
+  .mock-b-dot.inactive { background: #dde3ea; }
+  .mock-b-dot-text { font-size: 0; width: 40px; height: 6px; background: #b0bcc8; border-radius: 2px; }
+  .mock-b-connector { flex: 1; height: 2px; background: #dde3ea; margin: 0 4px; }
+  .mock-b-connector.done { background: #56afe2; }
+  .mock-b-card { background: white; border-radius: 12px; padding: 18px; flex: 1; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+  .mock-b-heading { height: 14px; background: #17324b; border-radius: 3px; width: 55%; opacity: 0.75; }
+  .mock-b-sub { height: 7px; background: #c0cdd8; border-radius: 2px; width: 70%; }
+  .mock-b-field { display: flex; flex-direction: column; gap: 5px; }
+  .mock-b-label { height: 6px; background: #8eafc5; border-radius: 2px; width: 30%; }
+  .mock-b-input { height: 32px; background: #f4f6f9; border-radius: 6px; border: 1px solid #dde3ea; }
+  .mock-b-textarea2 { height: 64px; background: #f4f6f9; border-radius: 6px; border: 1px solid #dde3ea; }
+  .mock-b-footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
+  .mock-b-back { height: 30px; background: #f4f6f9; border-radius: 8px; width: 70px; border: 1px solid #dde3ea; }
+  .mock-b-next { height: 30px; background: #56afe2; border-radius: 8px; width: 90px; }
+  .mock-b-progress { height: 4px; background: #e6eaf0; border-radius: 2px; overflow: hidden; }
+  .mock-b-progress-fill { height: 100%; background: #56afe2; width: 33%; border-radius: 2px; }
+
+  /* Option C — Command-center: dark left panel + bright main */
+  .mock-c { display: grid; grid-template-columns: 200px 1fr; min-height: 280px; background: #f4f6f9; }
+  .mock-c-sidebar { background: #17324b; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+  .mock-c-sidebar-logo { height: 12px; background: rgba(255,255,255,0.8); border-radius: 3px; width: 70%; }
+  .mock-c-nav { display: flex; flex-direction: column; gap: 4px; margin-top: 8px; }
+  .mock-c-nav-item { height: 28px; border-radius: 6px; background: rgba(255,255,255,0.08); display: flex; align-items: center; padding: 0 10px; gap: 8px; }
+  .mock-c-nav-item.active { background: rgba(86,175,226,0.25); }
+  .mock-c-nav-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.3); flex-shrink: 0; }
+  .mock-c-nav-dot.active { background: #56afe2; }
+  .mock-c-nav-text { height: 7px; background: rgba(255,255,255,0.25); border-radius: 2px; flex: 1; }
+  .mock-c-nav-text.active { background: rgba(255,255,255,0.65); }
+  .mock-c-main { padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .mock-c-topbar { display: flex; justify-content: space-between; align-items: center; }
+  .mock-c-title { height: 11px; background: #17324b; border-radius: 3px; width: 50%; opacity: 0.7; }
+  .mock-c-pills { display: flex; gap: 6px; }
+  .mock-c-pill { height: 22px; border-radius: 999px; background: #e8f5ff; width: 70px; }
+  .mock-c-form-card { background: white; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); flex: 1; }
+  .mock-c-label { height: 6px; background: #8eafc5; border-radius: 2px; width: 30%; }
+  .mock-c-input2 { height: 30px; background: #f4f6f9; border-radius: 6px; border: 1px solid #dde3ea; }
+  .mock-c-textarea3 { height: 50px; background: #f4f6f9; border-radius: 6px; border: 1px solid #dde3ea; }
+  .mock-c-grid2 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+  .mock-c-select2 { height: 28px; background: #f4f6f9; border-radius: 6px; border: 1px solid #dde3ea; }
+  .mock-c-btn2 { height: 36px; background: #17324b; border-radius: 8px; margin-top: auto; }
+</style>
+
+<h2>Generator layout — pick a direction</h2>
+<p class="subtitle">Three different ways to organize the workspace. All keep the same functionality — just different flow and feel.</p>
+
+<div class="cards">
+
+  <!-- Option A -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="mock">
+      <div class="nav-bar">
+        <div class="nav-logo"></div>
+        <div class="nav-links"><div class="nav-link"></div><div class="nav-link active"></div><div class="nav-link"></div></div>
+      </div>
+      <div class="mock-a">
+        <div class="mock-a-main">
+          <div class="mock-a-page-title"></div>
+          <div class="mock-a-page-sub"></div>
+          <div class="mock-a-card">
+            <div class="mock-a-card-label"></div>
+            <div class="mock-a-input"></div>
+            <div class="mock-a-card-label"></div>
+            <div class="mock-a-textarea"></div>
+            <div class="mock-a-grid">
+              <div class="mock-a-select"></div>
+              <div class="mock-a-select"></div>
+              <div class="mock-a-select"></div>
+              <div class="mock-a-select"></div>
+            </div>
+            <div class="mock-a-btn"></div>
+          </div>
+        </div>
+        <div class="mock-a-sidebar">
+          <div class="mock-a-sidebar-section">
+            <div class="mock-a-sidebar-title"></div>
+            <div class="mock-a-sidebar-line"></div>
+            <div class="mock-a-sidebar-line short"></div>
+            <div class="mock-a-sidebar-tag"></div>
+          </div>
+          <div class="mock-a-sidebar-section">
+            <div class="mock-a-sidebar-title"></div>
+            <div class="mock-a-sidebar-line"></div>
+            <div class="mock-a-sidebar-line short"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Focused form + sidebar</h3>
+      <p>La forma principal ocupa la mayor parte del espacio. La barra lateral a la derecha muestra historial y calidad. Más limpio, menos distracciones. Similar a Notion o Linear.</p>
+    </div>
+  </div>
+
+  <!-- Option B -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="mock">
+      <div class="nav-bar">
+        <div class="nav-logo"></div>
+        <div class="nav-links"><div class="nav-link"></div><div class="nav-link active"></div><div class="nav-link"></div></div>
+      </div>
+      <div class="mock-b">
+        <div class="mock-b-steps">
+          <div class="mock-b-step">
+            <div class="mock-b-dot"><div class="mock-b-dot-inner"></div></div>
+            <div class="mock-b-dot-text"></div>
+          </div>
+          <div class="mock-b-connector done"></div>
+          <div class="mock-b-step">
+            <div class="mock-b-dot"><div class="mock-b-dot-inner"></div></div>
+            <div class="mock-b-dot-text"></div>
+          </div>
+          <div class="mock-b-connector"></div>
+          <div class="mock-b-step">
+            <div class="mock-b-dot inactive"></div>
+            <div class="mock-b-dot-text"></div>
+          </div>
+          <div class="mock-b-connector"></div>
+          <div class="mock-b-step">
+            <div class="mock-b-dot inactive"></div>
+            <div class="mock-b-dot-text"></div>
+          </div>
+        </div>
+        <div class="mock-b-progress"><div class="mock-b-progress-fill"></div></div>
+        <div class="mock-b-card">
+          <div class="mock-b-heading"></div>
+          <div class="mock-b-sub"></div>
+          <div class="mock-b-field">
+            <div class="mock-b-label"></div>
+            <div class="mock-b-input"></div>
+          </div>
+          <div class="mock-b-field">
+            <div class="mock-b-label"></div>
+            <div class="mock-b-textarea2"></div>
+          </div>
+          <div class="mock-b-footer">
+            <div class="mock-b-back"></div>
+            <div class="mock-b-next"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Wizard por pasos</h3>
+      <p>Divide el proceso en 4 pasos: Tema → Coach → Config → Generar. Menos abrumador para usuarios nuevos. Más largo de completar para usuarios avanzados. Similar a Typeform o Onboarding flows.</p>
+    </div>
+  </div>
+
+  <!-- Option C -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="mock">
+      <div class="mock-c">
+        <div class="mock-c-sidebar">
+          <div class="mock-c-sidebar-logo"></div>
+          <div class="mock-c-nav">
+            <div class="mock-c-nav-item"><div class="mock-c-nav-dot"></div><div class="mock-c-nav-text"></div></div>
+            <div class="mock-c-nav-item active"><div class="mock-c-nav-dot active"></div><div class="mock-c-nav-text active"></div></div>
+            <div class="mock-c-nav-item"><div class="mock-c-nav-dot"></div><div class="mock-c-nav-text"></div></div>
+            <div style="height: 16px;"></div>
+            <div class="mock-c-nav-item"><div class="mock-c-nav-dot"></div><div class="mock-c-nav-text"></div></div>
+            <div class="mock-c-nav-item"><div class="mock-c-nav-dot"></div><div class="mock-c-nav-text"></div></div>
+          </div>
+        </div>
+        <div class="mock-c-main">
+          <div class="mock-c-topbar">
+            <div class="mock-c-title"></div>
+            <div class="mock-c-pills"><div class="mock-c-pill"></div><div class="mock-c-pill"></div></div>
+          </div>
+          <div class="mock-c-form-card">
+            <div class="mock-c-label"></div>
+            <div class="mock-c-input2"></div>
+            <div class="mock-c-label"></div>
+            <div class="mock-c-textarea3"></div>
+            <div class="mock-c-grid2">
+              <div class="mock-c-select2"></div>
+              <div class="mock-c-select2"></div>
+              <div class="mock-c-select2"></div>
+            </div>
+            <div class="mock-c-btn2"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — App sidebar permanente (app-like)</h3>
+      <p>Sidebar navy fija a la izquierda con navegación vertical. El contenido principal ocupa el resto. Se siente como una app real — Linear, Vercel, Supabase. Elimina el top navbar.</p>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,314 @@
+<style>
+  /* ── Reset & base ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #f4f4f0; font-family: "Segoe UI", system-ui, sans-serif; }
+  h2.page-q { text-align: center; font-size: 1.25rem; font-weight: 700; color: #17324b; margin: 32px 0 6px; }
+  p.page-sub { text-align: center; color: #5f7286; font-size: 0.92rem; margin-bottom: 28px; }
+
+  /* ── Cards grid ── */
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 0 20px 40px; max-width: 1240px; margin: 0 auto; }
+  @media (max-width: 900px) { .cards { grid-template-columns: 1fr; } }
+  .card { background: #fff; border-radius: 16px; border: 2px solid transparent; cursor: pointer; overflow: hidden; transition: border-color 150ms, box-shadow 150ms; box-shadow: 0 4px 14px rgba(43,71,109,0.07); }
+  .card:hover { box-shadow: 0 8px 28px rgba(43,71,109,0.13); }
+  .card.selected { border-color: #56afe2; box-shadow: 0 0 0 4px rgba(86,175,226,0.18); }
+  .card-label { padding: 14px 18px 10px; border-top: 1px solid rgba(76,101,126,0.1); }
+  .card-label h3 { font-size: 0.95rem; font-weight: 700; color: #17324b; margin-bottom: 3px; }
+  .card-label p { font-size: 0.8rem; color: #5f7286; line-height: 1.4; }
+
+  /* ── Shared mini-page shell ── */
+  .pg { font-family: "Segoe UI", system-ui, sans-serif; font-size: 13px; line-height: 1.55; color: #17324b; }
+  .pg-nav { display: flex; justify-content: space-between; align-items: center; padding: 10px 18px; border-bottom: 1px solid rgba(76,101,126,0.12); background: #fdfefd; }
+  .pg-nav .logo { font-size: 13px; font-weight: 800; letter-spacing: 0.05em; color: #17324b; }
+  .pg-nav .logo small { display: block; font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase; color: #5f7286; font-weight: 700; line-height: 1; margin-bottom: 1px; }
+  .pg-nav .nav-links { display: flex; gap: 12px; font-size: 11px; color: #5f7286; }
+  .pg-eyebrow { font-size: 9px; text-transform: uppercase; letter-spacing: 0.16em; color: #56afe2; font-weight: 700; margin-bottom: 4px; }
+  .pg-h1 { font-size: 17px; font-weight: 800; line-height: 1.15; color: #17324b; max-width: 18ch; }
+  .pg-lede { font-size: 11px; color: #5f7286; max-width: 30ch; margin-top: 6px; line-height: 1.5; }
+  .pg-btn { display: inline-block; background: #56afe2; color: white; font-size: 10px; font-weight: 700; padding: 5px 11px; border-radius: 8px; margin-top: 9px; }
+  .pg-section-title { font-size: 13px; font-weight: 800; color: #17324b; max-width: 22ch; line-height: 1.25; margin-bottom: 4px; }
+  .pg-section-copy { font-size: 10px; color: #5f7286; max-width: 30ch; line-height: 1.5; }
+  .pg-tag { display: inline-block; font-size: 8px; text-transform: uppercase; letter-spacing: 0.12em; color: #2f8dc4; background: rgba(86,175,226,0.12); padding: 2px 6px; border-radius: 4px; margin-bottom: 3px; }
+  .pg-step-num { font-size: 28px; font-weight: 900; opacity: 0.12; color: #17324b; line-height: 1; }
+  .pg-step-title { font-size: 11px; font-weight: 700; color: #17324b; }
+  .pg-step-body { font-size: 10px; color: #5f7286; margin-top: 2px; }
+  .pg-footer { padding: 10px 18px; border-top: 1px solid rgba(76,101,126,0.1); background: #fdfefd; font-size: 10px; color: #5f7286; display: flex; justify-content: space-between; }
+
+  /* ═══════════════════════════
+     OPCIÓN A — Color Bands
+  ═══════════════════════════ */
+  .pg-a-hero { background: #fdfefd; padding: 20px 18px 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: center; }
+  .pg-a-sidebox { background: linear-gradient(135deg, #e8f5ff 0%, #f0ecfa 100%); border-radius: 12px; padding: 14px; display: grid; gap: 8px; }
+  .pg-a-sideitem { padding-top: 6px; border-top: 1px solid rgba(86,175,226,0.25); }
+  .pg-a-sideitem span { font-size: 8px; text-transform: uppercase; letter-spacing: 0.14em; color: #2f8dc4; font-weight: 700; }
+  .pg-a-sideitem strong { display: block; font-size: 10px; color: #17324b; }
+
+  .pg-a-overview { background: #eef9f0; padding: 16px 18px; }
+  .pg-a-overview-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
+  .pg-a-overview-card { background: #fff; border-radius: 8px; padding: 8px 10px; }
+  .pg-a-overview-card span { font-size: 8px; text-transform: uppercase; letter-spacing: 0.12em; color: #2f8e66; font-weight: 700; display: block; margin-bottom: 2px; }
+  .pg-a-overview-card strong { font-size: 10px; color: #17324b; }
+
+  .pg-a-flow { background: #fef6ec; padding: 16px 18px; }
+  .pg-a-flow-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
+  .pg-a-flow-item { background: #fff; border-radius: 8px; padding: 8px 10px; }
+
+  .pg-a-cta { background: linear-gradient(135deg, #e8f0fb 0%, #f3ecfa 100%); padding: 16px 18px; display: flex; justify-content: space-between; align-items: center; }
+
+  /* ═══════════════════════════
+     OPCIÓN B — SVG Shapes
+  ═══════════════════════════ */
+  .pg-b-hero { background: #fdfefd; padding: 20px 18px 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: center; position: relative; overflow: hidden; }
+  .pg-b-blob1 { position: absolute; top: -20px; right: -10px; width: 120px; height: 120px; background: radial-gradient(circle, rgba(86,175,226,0.15) 0%, transparent 70%); border-radius: 50%; }
+  .pg-b-blob2 { position: absolute; bottom: -15px; left: -20px; width: 90px; height: 90px; background: radial-gradient(circle, rgba(240,236,250,0.8) 0%, transparent 70%); border-radius: 50%; }
+  .pg-b-sidebox { position: relative; z-index: 1; }
+  .pg-b-sideitem { padding-top: 6px; border-top: 1px solid rgba(76,101,126,0.12); }
+  .pg-b-sideitem span { font-size: 8px; text-transform: uppercase; letter-spacing: 0.14em; color: #2f8dc4; font-weight: 700; }
+  .pg-b-sideitem strong { display: block; font-size: 10px; color: #17324b; }
+  .pg-b-side-gap { display: grid; gap: 7px; }
+
+  .pg-b-overview { background: #fdfefd; padding: 16px 18px; position: relative; overflow: hidden; }
+  .pg-b-diamond { position: absolute; top: 10px; right: 20px; width: 40px; height: 40px; background: rgba(86,175,226,0.1); transform: rotate(45deg); border-radius: 6px; }
+  .pg-b-diamond2 { position: absolute; top: 30px; right: 48px; width: 22px; height: 22px; background: rgba(240,236,250,0.6); transform: rotate(45deg); border-radius: 4px; }
+  .pg-b-overview-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
+  .pg-b-overview-card { background: #f7fbfe; border-radius: 8px; padding: 8px 10px; border: 1px solid rgba(86,175,226,0.12); }
+  .pg-b-overview-card span { font-size: 8px; text-transform: uppercase; letter-spacing: 0.12em; color: #2f8dc4; font-weight: 700; display: block; margin-bottom: 2px; }
+
+  .pg-b-flow { background: #fdfefd; padding: 16px 18px; position: relative; overflow: hidden; }
+  .pg-b-arc { position: absolute; bottom: -30px; right: -30px; width: 100px; height: 100px; border: 18px solid rgba(86,175,226,0.08); border-radius: 50%; }
+  .pg-b-flow-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; position: relative; z-index: 1; }
+  .pg-b-flow-item { background: #fdfefd; padding: 8px 10px; border-top: 2px solid rgba(86,175,226,0.3); }
+
+  .pg-b-cta { background: #fdfefd; padding: 16px 18px; position: relative; overflow: hidden; display: flex; justify-content: space-between; align-items: center; }
+  .pg-b-cta-blob { position: absolute; inset: 0; background: radial-gradient(ellipse at 80% 50%, rgba(86,175,226,0.08) 0%, transparent 65%); }
+
+  /* ═══════════════════════════
+     OPCIÓN C — Illustrated Panels
+  ═══════════════════════════ */
+  .pg-c-hero { background: #17324b; padding: 20px 18px 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: center; position: relative; overflow: hidden; }
+  .pg-c-hero .pg-eyebrow { color: #67c2f1; }
+  .pg-c-hero .pg-h1 { color: #edf6fd; }
+  .pg-c-hero .pg-lede { color: #a0b5c6; }
+  .pg-c-hero .pg-btn { background: #67c2f1; color: #0c1823; }
+  .pg-c-art { display: flex; align-items: center; justify-content: center; }
+  .pg-c-art svg { width: 100%; max-width: 130px; }
+  .pg-c-deco1 { position: absolute; top: -20px; right: -10px; width: 80px; height: 80px; background: rgba(103,194,241,0.1); border-radius: 50%; }
+  .pg-c-deco2 { position: absolute; bottom: -10px; left: 140px; width: 50px; height: 50px; background: rgba(240,236,250,0.1); border-radius: 50%; }
+
+  .pg-c-overview { background: #fdfefd; padding: 16px 18px; }
+  .pg-c-overview-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
+  .pg-c-overview-card { border-radius: 10px; padding: 10px; }
+  .pg-c-overview-card:nth-child(1) { background: #e8f5ff; }
+  .pg-c-overview-card:nth-child(2) { background: #eef9f0; }
+  .pg-c-overview-card:nth-child(3) { background: #f3ecfa; }
+  .pg-c-overview-card span { font-size: 8px; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 700; display: block; margin-bottom: 3px; }
+  .pg-c-overview-card:nth-child(1) span { color: #2f8dc4; }
+  .pg-c-overview-card:nth-child(2) span { color: #2f8e66; }
+  .pg-c-overview-card:nth-child(3) span { color: #7c5cbf; }
+
+  .pg-c-flow { background: #fef6ec; padding: 16px 18px; }
+  .pg-c-flow-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
+  .pg-c-flow-item { background: #fff; border-radius: 8px; padding: 8px 10px; }
+
+  .pg-c-cta { background: #17324b; padding: 16px 18px; display: flex; justify-content: space-between; align-items: center; }
+  .pg-c-cta h2 { font-size: 13px; font-weight: 700; color: #edf6fd; max-width: 20ch; }
+  .pg-c-cta .pg-btn { background: #67c2f1; color: #0c1823; }
+</style>
+
+<h2 class="page-q">¿Cuál dirección visual se siente bien?</h2>
+<p class="page-sub">Los tres conservan el mismo contenido — solo cambia cómo se respira visualmente</p>
+
+<div class="cards">
+
+  <!-- ── OPCIÓN A ─ Bandas de color pastel ── -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="pg">
+      <!-- Nav -->
+      <div class="pg-nav">
+        <div class="logo"><small>Studio</small>BEREAN</div>
+        <div class="nav-links"><span>Generator</span><span>Templates</span></div>
+      </div>
+      <!-- Hero: blanco + caja pastel azul-lavanda -->
+      <div class="pg-a-hero">
+        <div>
+          <div class="pg-eyebrow">Pastoral, practical, transparent</div>
+          <div class="pg-h1">Build studies that feel trustworthy and ready to teach.</div>
+          <div class="pg-lede">Studio Berean helps teachers and leaders build traceable workbooks.</div>
+          <div class="pg-btn">Open Generator</div>
+        </div>
+        <div class="pg-a-sidebox">
+          <div class="pg-a-sideitem"><span>Traceable</span><strong>Prompts y fuentes siempre visibles</strong></div>
+          <div class="pg-a-sideitem"><span>Practical</span><strong>Para clases, hojas de trabajo y seguimiento</strong></div>
+          <div class="pg-a-sideitem"><span>Pastoral</span><strong>Para temas con peso emocional y espiritual</strong></div>
+        </div>
+      </div>
+      <!-- Overview: banda verde-menta suave -->
+      <div class="pg-a-overview">
+        <div class="pg-eyebrow" style="color:#2f8e66">What it does</div>
+        <div class="pg-section-title">Para situaciones reales y preguntas reales.</div>
+        <div class="pg-a-overview-grid">
+          <div class="pg-a-overview-card"><span>Personas reales</span><strong>Estudiantes, maestros, líderes</strong></div>
+          <div class="pg-a-overview-card"><span>Uso real</span><strong>Workbooks, worksheets, guías</strong></div>
+          <div class="pg-a-overview-card"><span>Transparencia</span><strong>Trace, preview, fuentes visibles</strong></div>
+        </div>
+      </div>
+      <!-- Flow: banda cálida melocotón -->
+      <div class="pg-a-flow">
+        <div class="pg-eyebrow" style="color:#c47a2f">How it flows</div>
+        <div class="pg-section-title">Un camino más tranquilo.</div>
+        <div class="pg-a-flow-grid">
+          <div class="pg-a-flow-item"><div class="pg-step-num">1</div><div class="pg-step-title">Choose a template</div><div class="pg-step-body">Ready-made or custom brief</div></div>
+          <div class="pg-a-flow-item"><div class="pg-step-num">2</div><div class="pg-step-title">Shape the study</div><div class="pg-step-body">Brief builder + Study Coach</div></div>
+          <div class="pg-a-flow-item"><div class="pg-step-num">3</div><div class="pg-step-title">Generate & export</div><div class="pg-step-body">Open guide, export formato</div></div>
+        </div>
+      </div>
+      <!-- CTA: banda azul-lavanda degradado -->
+      <div class="pg-a-cta">
+        <div><div class="pg-eyebrow">Start here</div><div class="pg-section-title">Build your next study.</div></div>
+        <div class="pg-btn">Open Generator</div>
+      </div>
+      <div class="pg-footer"><span>Studio BEREAN</span><span>Generator · Templates</span></div>
+    </div>
+    <div class="card-label">
+      <h3>A — Bandas de color pastel</h3>
+      <p>Cada sección tiene su propio tono suave: azul, menta, melocotón, lavanda. Ritmo visual sin imágenes ni formas.</p>
+    </div>
+  </div>
+
+  <!-- ── OPCIÓN B ─ Formas decorativas suaves ── -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="pg">
+      <div class="pg-nav">
+        <div class="logo"><small>Studio</small>BEREAN</div>
+        <div class="nav-links"><span>Generator</span><span>Templates</span></div>
+      </div>
+      <!-- Hero: fondo blanco + blobs radiales -->
+      <div class="pg-b-hero">
+        <div class="pg-b-blob1"></div>
+        <div class="pg-b-blob2"></div>
+        <div style="position:relative;z-index:1">
+          <div class="pg-eyebrow">Pastoral, practical, transparent</div>
+          <div class="pg-h1">Build studies that feel trustworthy and ready to teach.</div>
+          <div class="pg-lede">Workbooks con trazabilidad Berean visible.</div>
+          <div class="pg-btn">Open Generator</div>
+        </div>
+        <div class="pg-b-sidebox pg-b-side-gap" style="position:relative;z-index:1">
+          <div class="pg-b-sideitem"><span>Traceable</span><strong>Prompts y fuentes visibles</strong></div>
+          <div class="pg-b-sideitem"><span>Practical</span><strong>Para clases y hojas de trabajo</strong></div>
+          <div class="pg-b-sideitem"><span>Pastoral</span><strong>Para temas con peso espiritual</strong></div>
+        </div>
+      </div>
+      <!-- Overview: fondo blanco + diamantes decorativos -->
+      <div class="pg-b-overview">
+        <div class="pg-b-diamond"></div><div class="pg-b-diamond2"></div>
+        <div class="pg-eyebrow">What it does</div>
+        <div class="pg-section-title">Para situaciones reales.</div>
+        <div class="pg-b-overview-grid">
+          <div class="pg-b-overview-card"><span>Personas reales</span><strong>Estudiantes, maestros</strong></div>
+          <div class="pg-b-overview-card"><span>Uso real</span><strong>Workbooks, worksheets</strong></div>
+          <div class="pg-b-overview-card"><span>Transparencia</span><strong>Trace, preview, fuentes</strong></div>
+        </div>
+      </div>
+      <!-- Flow: fondo blanco + arco decorativo + números grandes -->
+      <div class="pg-b-flow">
+        <div class="pg-b-arc"></div>
+        <div class="pg-eyebrow">How it flows</div>
+        <div class="pg-section-title">Un camino más tranquilo.</div>
+        <div class="pg-b-flow-grid">
+          <div class="pg-b-flow-item"><div class="pg-step-num">1</div><div class="pg-step-title">Choose a template</div><div class="pg-step-body">Ready-made o brief custom</div></div>
+          <div class="pg-b-flow-item"><div class="pg-step-num">2</div><div class="pg-step-title">Shape the study</div><div class="pg-step-body">Brief builder + Study Coach</div></div>
+          <div class="pg-b-flow-item"><div class="pg-step-num">3</div><div class="pg-step-title">Generate & export</div><div class="pg-step-body">Open guide, exportar</div></div>
+        </div>
+      </div>
+      <!-- CTA: degradado radial sutil -->
+      <div class="pg-b-cta">
+        <div class="pg-b-cta-blob"></div>
+        <div style="position:relative;z-index:1"><div class="pg-eyebrow">Start here</div><div class="pg-section-title">Build your next study.</div></div>
+        <div class="pg-btn" style="position:relative;z-index:1">Open Generator</div>
+      </div>
+      <div class="pg-footer"><span>Studio BEREAN</span><span>Generator · Templates</span></div>
+    </div>
+    <div class="card-label">
+      <h3>B — Formas decorativas sutiles</h3>
+      <p>Blobs radiales, diamantes y arcos en esquinas de secciones. Fondo blanco con acentos de color abstractos — como acuarela suave.</p>
+    </div>
+  </div>
+
+  <!-- ── OPCIÓN C ─ Hero oscuro + cards de color por categoría ── -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="pg">
+      <div class="pg-nav" style="background:#17324b;border-bottom-color:rgba(160,195,220,0.15)">
+        <div class="logo" style="color:#edf6fd"><small style="color:#a0b5c6">Studio</small>BEREAN</div>
+        <div class="nav-links" style="color:#a0b5c6"><span>Generator</span><span>Templates</span></div>
+      </div>
+      <!-- Hero: fondo oscuro navy + ilustración SVG pastel -->
+      <div class="pg-c-hero">
+        <div class="pg-c-deco1"></div><div class="pg-c-deco2"></div>
+        <div style="position:relative;z-index:1">
+          <div class="pg-eyebrow">Pastoral, practical, transparent</div>
+          <div class="pg-h1">Build studies that feel trustworthy and ready to teach.</div>
+          <div class="pg-lede">Workbooks con trazabilidad visible para líderes y maestros.</div>
+          <div class="pg-btn">Open Generator</div>
+        </div>
+        <!-- Ilustración SVG simple pastel -->
+        <div class="pg-c-art" style="position:relative;z-index:1">
+          <svg viewBox="0 0 130 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- libro abierto estilizado -->
+            <rect x="10" y="30" width="50" height="60" rx="6" fill="rgba(103,194,241,0.18)" stroke="rgba(103,194,241,0.5)" stroke-width="1.5"/>
+            <rect x="70" y="30" width="50" height="60" rx="6" fill="rgba(240,236,250,0.18)" stroke="rgba(200,180,230,0.5)" stroke-width="1.5"/>
+            <line x1="60" y1="30" x2="70" y2="30" stroke="rgba(103,194,241,0.4)" stroke-width="1.5"/>
+            <line x1="60" y1="90" x2="70" y2="90" stroke="rgba(103,194,241,0.4)" stroke-width="1.5"/>
+            <!-- líneas de texto en libro izquierdo -->
+            <line x1="20" y1="46" x2="50" y2="46" stroke="rgba(103,194,241,0.4)" stroke-width="1"/>
+            <line x1="20" y1="52" x2="45" y2="52" stroke="rgba(103,194,241,0.3)" stroke-width="1"/>
+            <line x1="20" y1="58" x2="50" y2="58" stroke="rgba(103,194,241,0.3)" stroke-width="1"/>
+            <line x1="20" y1="64" x2="40" y2="64" stroke="rgba(103,194,241,0.25)" stroke-width="1"/>
+            <line x1="20" y1="70" x2="50" y2="70" stroke="rgba(103,194,241,0.3)" stroke-width="1"/>
+            <!-- líneas de texto en libro derecho -->
+            <line x1="80" y1="46" x2="110" y2="46" stroke="rgba(200,180,230,0.4)" stroke-width="1"/>
+            <line x1="80" y1="52" x2="105" y2="52" stroke="rgba(200,180,230,0.3)" stroke-width="1"/>
+            <line x1="80" y1="58" x2="110" y2="58" stroke="rgba(200,180,230,0.3)" stroke-width="1"/>
+            <line x1="80" y1="64" x2="100" y2="64" stroke="rgba(200,180,230,0.25)" stroke-width="1"/>
+            <!-- marcador bookmark -->
+            <rect x="102" y="26" width="10" height="18" rx="2" fill="rgba(103,194,241,0.5)"/>
+            <polygon points="102,44 107,40 112,44" fill="rgba(103,194,241,0.5)"/>
+            <!-- estrella destellante pequeña -->
+            <circle cx="28" cy="20" r="2.5" fill="rgba(103,194,241,0.6)"/>
+            <circle cx="38" cy="16" r="1.5" fill="rgba(200,180,230,0.6)"/>
+            <circle cx="95" cy="18" r="2" fill="rgba(103,194,241,0.4)"/>
+          </svg>
+        </div>
+      </div>
+      <!-- Overview: fondo blanco + cards de colores por categoría -->
+      <div class="pg-c-overview">
+        <div class="pg-eyebrow">What it does</div>
+        <div class="pg-section-title">Para situaciones reales.</div>
+        <div class="pg-c-overview-grid">
+          <div class="pg-c-overview-card"><span>Personas reales</span><strong>Estudiantes, maestros, líderes</strong></div>
+          <div class="pg-c-overview-card"><span>Uso real</span><strong>Workbooks, worksheets, guías</strong></div>
+          <div class="pg-c-overview-card"><span>Transparencia</span><strong>Trace, preview, fuentes visibles</strong></div>
+        </div>
+      </div>
+      <!-- Flow: banda melocotón + números grandes decorativos -->
+      <div class="pg-c-flow">
+        <div class="pg-eyebrow" style="color:#c47a2f">How it flows</div>
+        <div class="pg-section-title">Un camino más tranquilo.</div>
+        <div class="pg-c-flow-grid">
+          <div class="pg-c-flow-item"><div class="pg-step-num">1</div><div class="pg-step-title">Choose a template</div><div class="pg-step-body">Ready-made o brief custom</div></div>
+          <div class="pg-c-flow-item"><div class="pg-step-num">2</div><div class="pg-step-title">Shape the study</div><div class="pg-step-body">Brief builder + Study Coach</div></div>
+          <div class="pg-c-flow-item"><div class="pg-step-num">3</div><div class="pg-step-title">Generate & export</div><div class="pg-step-body">Open guide, exportar</div></div>
+        </div>
+      </div>
+      <!-- CTA: fondo navy oscuro de vuelta -->
+      <div class="pg-c-cta">
+        <div><div class="pg-eyebrow" style="color:#67c2f1">Start here</div><h2>Build your next study.</h2></div>
+        <div class="pg-btn">Open Generator</div>
+      </div>
+      <div class="pg-footer" style="background:#0c1823;color:#5f7286;border-top-color:rgba(160,195,220,0.12)"><span>Studio BEREAN</span><span>Generator · Templates</span></div>
+    </div>
+    <div class="card-label">
+      <h3>C — Hero oscuro + ilustración + cards de color</h3>
+      <p>Hero navy con una ilustración SVG pastel (libro + destellos). Secciones con cards de colores por categoría: azul, verde, lavanda.</p>
+    </div>
+  </div>
+
+</div>
