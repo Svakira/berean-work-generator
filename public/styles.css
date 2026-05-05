@@ -3071,14 +3071,14 @@ body.body-gen .site-header-tools {
 }
 
 .gen-coach-toggle:hover {
-  background: var(--bg, #f7f9fc);
+  background: var(--surface-soft);
 }
 
 .gen-coach-toggle::-webkit-details-marker { display: none; }
 
 .gen-coach-details[open] .gen-coach-toggle {
   border-bottom: 1px solid var(--line);
-  background: var(--bg, #f7f9fc);
+  background: var(--surface-soft);
 }
 
 .gen-coach-icon {
@@ -3131,7 +3131,7 @@ body.body-gen .site-header-tools {
 
 .gen-coach-body {
   padding: 14px 20px;
-  background: var(--bg, #f7f9fc);
+  background: var(--surface-soft);
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -3146,8 +3146,8 @@ body.body-gen .site-header-tools {
 
 /* ── Brief preview ── */
 .gen-brief-preview {
-  background: #fdf6ec;
-  border-left: 3px solid #f0b955;
+  background: var(--surface-muted);
+  border-left: 3px solid var(--accent);
   margin: 6px 20px;
   border-radius: 5px;
   padding: 6px 12px;
@@ -3159,7 +3159,7 @@ body.body-gen .site-header-tools {
 .gen-brief-label {
   font-size: 0.58rem;
   font-weight: 700;
-  color: #b07800;
+  color: var(--accent-strong);
   text-transform: uppercase;
   letter-spacing: 0.09em;
 }
@@ -3539,11 +3539,6 @@ body.body-gen .site-header-tools {
 
 [data-theme="dark"] .gen-form-card {
   background: var(--surface);
-}
-
-[data-theme="dark"] .gen-coach-toggle,
-[data-theme="dark"] .gen-coach-body {
-  background: var(--surface-soft);
 }
 
 [data-theme="dark"] .gen-right-col {
