@@ -393,7 +393,7 @@ function worksheetQuestions(audience, theme) {
 function answerBlankLines(count = 4) {
   return Array.from({ length: count })
     .map(() => "____________________________________________________________")
-    .join("\n");
+    .join("\n\n");
 }
 
 function worksheetQuestionBlocks(questions) {

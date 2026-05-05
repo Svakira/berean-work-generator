@@ -118,7 +118,7 @@ function markdownToHtml(markdownText) {
 
     const paragraph = [line];
     index += 1;
-    while (index < lines.length && lines[index].trim() && !/^(#{1,6})\s+/.test(lines[index]) && !/^\d+\.\s+/.test(lines[index]) && !/^-\s+/.test(lines[index]) && !/^>\s?/.test(lines[index])) {
+    while (index < lines.length && lines[index].trim() && !/^(#{1,6})\s+/.test(lines[index]) && !/^\d+\.\s+/.test(lines[index]) && !/^-\s+/.test(lines[index]) && !/^>\s?/.test(lines[index]) && !/^_+$/.test(lines[index].trim())) {
       paragraph.push(lines[index]);
       index += 1;
     }

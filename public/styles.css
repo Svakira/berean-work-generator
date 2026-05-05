@@ -1868,6 +1868,8 @@ body {
 
 .page-guide .guide-reading-surface {
   padding: 30px 34px;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .page-guide .guide-sidebar .panel,
@@ -2135,6 +2137,8 @@ progress::-moz-progress-bar {
 
 .guide-reading-surface {
   padding: 24px;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .empty-state {
@@ -2243,6 +2247,7 @@ progress::-moz-progress-bar {
 .worksheet-sheet {
   display: grid;
   gap: 18px;
+  min-width: 0;
 }
 
 .worksheet-sheet.student-worksheet {
@@ -2273,6 +2278,8 @@ progress::-moz-progress-bar {
 .worksheet-content {
   color: var(--muted-strong);
   line-height: 1.72;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .worksheet-content p,
