@@ -11,7 +11,7 @@
  */
 
 const TOTALGPT_API_URL = "https://api.totalgpt.ai/v1/completions";
-const TOTALGPT_MODEL = "Qwen-Qwen3-30B-A3B";
+const TOTALGPT_MODEL = "Qwen-Qwen3-235B-A22B-Thinking-2507";
 
 // Known section openers — used to find where real content starts
 const SECTION_OPENERS = [
