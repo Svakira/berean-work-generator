@@ -4,6 +4,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import { askBereanPastoral, askBereanScholar } from "./bereanClient.js";
 import { generateStudyContent } from "./qwenClient.js";
 import { buildWorkbook, workbookToMarkdown, evaluateWorkbookQuality } from "./workbookEngine.js";
+import { scoreContent } from "./qualityScorer.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -487,8 +488,27 @@ export function createServerApp() {
     let qwenWarning = null;
     let bereanWarning = null;
 
+    // Qwen with one retry if quality score < 65
+    async function generateWithRetry(params) {
+      const result = await generateStudyContent(params);
+      const { score, issues } = scoreContent(result.content);
+      if (score >= 65) {
+        return { ...result, qualityScore: score, qualityIssues: issues, retried: false };
+      }
+      const retryParams = {
+        ...params,
+        lessonContext: [
+          params.lessonContext,
+          `Important: previous attempt scored ${score}/100. Issues: ${issues.join("; ")}. Please focus on second-person voice and including at least 5 scripture references.`
+        ].filter(Boolean).join(" ")
+      };
+      const retryResult = await generateStudyContent(retryParams);
+      const retry = scoreContent(retryResult.content);
+      return { ...retryResult, qualityScore: retry.score, qualityIssues: retry.issues, retried: true };
+    }
+
     const [qwenOutcome, bereanOutcome] = await Promise.allSettled([
-      generateStudyContent({
+      generateWithRetry({
         theme: effectiveTheme,
         format: effectiveFormat,
         audience: input.audience,
@@ -555,7 +575,10 @@ export function createServerApp() {
       telemetry: {
         scholarModel: scholarData?.model || "unknown",
         scholarElapsedMs: scholarData?.elapsed_ms || null,
-        sourcesCount: scholarData?.sources_count || 0
+        sourcesCount: scholarData?.sources_count || 0,
+        qualityScore: qwenResult?.qualityScore ?? null,
+        qualityIssues: qwenResult?.qualityIssues ?? [],
+        retried: qwenResult?.retried ?? false
       },
       provenance: {
         presetId: preset?.id || input.presetId || null,
