@@ -1,17 +1,14 @@
 /**
  * qwenClient.js
- * Client for TotalGPT API — Qwen3-30B-A3B model (thinking model)
+ * Client for TotalGPT API — Sao10K-72B-Qwen2.5-Kunou model (non-thinking)
  *
  * ARCHITECTURE:
- * - Qwen3-30B-A3B is a reasoning/thinking model. It outputs its thought process
- *   before the actual content. We suppress this with /no_think and strip residual.
- * - Winning prompt structure (tested across 10 variations, 4/5 scored 100/100):
- *   T07 / F02 style: specific section labels, OIA method, warm second-person,
- *   CONTENT_START marker to anchor stripping.
+ * - Uses Qwen2.5-72B fine-tune with no thinking mode. Direct completions output.
+ * - Prompt structure: direct pastoral instruction, strict second-person, 5-paragraph OIA framework.
  */
 
 const TOTALGPT_API_URL = "https://api.totalgpt.ai/v1/completions";
-const TOTALGPT_MODEL = "Qwen-Qwen3-235B-A22B-Thinking-2507";
+const TOTALGPT_MODEL = "Sao10K-72B-Qwen2.5-Kunou-v1-FP8-Dynamic";
 
 // Known section openers — used to find where real content starts
 const SECTION_OPENERS = [
@@ -115,37 +112,21 @@ Write the passage directly. No preamble.
 CONTENT_START`;
   }
 
-  return `/no_think
+  return `You are a warm, biblically grounded pastoral educator writing directly to ${audienceNote}.
 
-You are a warm, biblically grounded pastoral educator writing for ${audienceNote}.
+Write a 5-paragraph biblical reading passage on: ${theme}
+${coachAdditions ? `Pastoral guidance: ${coachAdditions}` : ""}
 
-TOPIC: ${theme}
-SESSION LENGTH: ${duration}
-${coachAdditions ? `PASTORAL GUIDANCE: ${coachAdditions}` : ""}
+Structure: first paragraph anchors in a key scripture and what it says; second gives historical or cultural context for the original audience; third explores the theological meaning; fourth speaks directly to how this applies to the reader's daily life today; fifth offers a gentle concrete invitation for this week.
 
-Write a 5-paragraph biblical reading passage on the topic above. Follow this exact paragraph structure:
+Requirements:
+- Address the reader directly in second-person voice ("you", "your") throughout — never use "we", "us", or "our"
+- Plain flowing prose only — no markdown, no headings, no bullet points
+- Naturally weave in at least 5 specific Bible references (e.g., John 3:16, Philippians 4:6)
+- 450-600 words total
+- No section labels, no questions, no reflection prompts
 
-Paragraph 1 — OBSERVATION: Anchor the reader in a key scripture. Name the passage and what it literally says. Help the reader see what is actually there in the text. (~80 words)
-
-Paragraph 2 — HISTORICAL CONTEXT: Briefly illuminate the original audience or historical moment. What did this mean to the first hearers? What was happening culturally or theologically? (~80 words)
-
-Paragraph 3 — INTERPRETATION: What does this passage mean theologically? Connect it to a broader biblical truth or theme. Show how it fits the larger story of Scripture. (~100 words)
-
-Paragraph 4 — PERSONAL APPLICATION: Speak directly to the reader ("you") about what this means for daily life right now. Be specific, warm, and honest about struggle and hope. (~100 words)
-
-Paragraph 5 — INVITATION: Close with a gentle call to action or reflection. What is one concrete step or posture the reader can take this week? (~80 words)
-
-Voice and style requirements:
-- Write entirely in warm, second-person voice ("you", "your") throughout all paragraphs
-- Plain prose only — no markdown, no headings, no bullet points, no numbered lists
-- Weave in at least 5 specific Bible references naturally (Book Chapter:Verse format)
-- Pastoral tone — like a trusted mentor sitting across the table
-- Do NOT include section labels in the output (do not write "Paragraph 1" or "OBSERVATION:")
-- Do NOT include questions, reflection prompts, or blanks — just flowing prose
-
-Write the passage directly. No preamble. No postscript.
-
-CONTENT_START`;
+Write the passage now, beginning with the first paragraph:`;
 }
 
 /**
@@ -181,10 +162,10 @@ export async function generateStudyContent(params) {
       "Authorization": `Bearer ${apiKey}`,
       "Content-Type": "application/json"
     },
-      body: JSON.stringify({
+    body: JSON.stringify({
       model: TOTALGPT_MODEL,
       prompt,
-      max_tokens: 2000,   // reading passage is 400-600 words; thinking model needs extra headroom
+      max_tokens: 1200,
       temperature: 0.7,
       stop: null
     })
