@@ -152,8 +152,15 @@ function sanitizeGeneratedText(text) {
 function extractScholarNote(bereanAnswer) {
   if (!bereanAnswer || bereanAnswer.length < 50) return "";
   let text = String(bereanAnswer)
+    // Strip markdown headings, bold, italic, horizontal rules
+    .replace(/^#{1,6}\s+.+$/gm, "")
+    .replace(/\*\*(.*?)\*\*/g, "$1")
+    .replace(/\*(.*?)\*/g, "$1")
+    .replace(/---+/g, "")
+    // Strip common AI preamble openers
     .replace(/^(Based on|According to|The|In the|From|Looking at)[^.]+\.\s*/i, "")
     .replace(/^(I can|I will|Here are|Here is)[^.]+\.\s*/i, "")
+    .replace(/\s+/g, " ")
     .trim();
   const sentences = text.match(/[^.!?]+[.!?]+/g) || [];
   return sentences.slice(0, 3).join(" ").trim();
