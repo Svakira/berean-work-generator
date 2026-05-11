@@ -117,24 +117,33 @@ CONTENT_START`;
 
   return `/no_think
 
-You are a warm, biblically grounded pastoral educator.
+You are a warm, biblically grounded pastoral educator writing for ${audienceNote}.
 
-Write a biblical reading passage (5 paragraphs) on the topic of: ${theme}
+TOPIC: ${theme}
+SESSION LENGTH: ${duration}
+${coachAdditions ? `PASTORAL GUIDANCE: ${coachAdditions}` : ""}
 
-This will be used as the reading section of a personal Bible study workbook for ${audienceNote}, lasting ${duration}.
-${coachAdditions ? `Additional guidance: ${coachAdditions}` : ""}
+Write a 5-paragraph biblical reading passage on the topic above. Follow this exact paragraph structure:
 
-Requirements:
-- Write in warm, second-person voice ("you", "your")
-- Plain text only. No markdown. No headings. No bullet points. No numbered lists.
-- Weave in at least 5 specific Bible references naturally (book chapter:verse format)
-- Warm, curious, pastoral tone — like a mentor sitting across the table from the reader
-- Each paragraph should open up a different dimension of the topic
-- Bring in biblical history, theology, and real life — make it genuinely illuminating
-- 400-600 words total
-- Do NOT include section headers, questions, or reflection prompts — just the reading passage
+Paragraph 1 — OBSERVATION: Anchor the reader in a key scripture. Name the passage and what it literally says. Help the reader see what is actually there in the text. (~80 words)
 
-Write the passage directly. No preamble.
+Paragraph 2 — HISTORICAL CONTEXT: Briefly illuminate the original audience or historical moment. What did this mean to the first hearers? What was happening culturally or theologically? (~80 words)
+
+Paragraph 3 — INTERPRETATION: What does this passage mean theologically? Connect it to a broader biblical truth or theme. Show how it fits the larger story of Scripture. (~100 words)
+
+Paragraph 4 — PERSONAL APPLICATION: Speak directly to the reader ("you") about what this means for daily life right now. Be specific, warm, and honest about struggle and hope. (~100 words)
+
+Paragraph 5 — INVITATION: Close with a gentle call to action or reflection. What is one concrete step or posture the reader can take this week? (~80 words)
+
+Voice and style requirements:
+- Write entirely in warm, second-person voice ("you", "your") throughout all paragraphs
+- Plain prose only — no markdown, no headings, no bullet points, no numbered lists
+- Weave in at least 5 specific Bible references naturally (Book Chapter:Verse format)
+- Pastoral tone — like a trusted mentor sitting across the table
+- Do NOT include section labels in the output (do not write "Paragraph 1" or "OBSERVATION:")
+- Do NOT include questions, reflection prompts, or blanks — just flowing prose
+
+Write the passage directly. No preamble. No postscript.
 
 CONTENT_START`;
 }
