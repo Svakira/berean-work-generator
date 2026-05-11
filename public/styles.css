@@ -28,27 +28,27 @@
 }
 
 [data-theme="dark"] {
-  --bg: #0c1823;
-  --surface: #112332;
-  --surface-soft: #132b3f;
-  --surface-muted: #0f2131;
-  --line: rgba(160, 195, 220, 0.18);
-  --line-strong: rgba(160, 195, 220, 0.28);
-  --text: #edf6fd;
-  --muted: #a0b5c6;
-  --muted-strong: #c7d8e5;
-  --accent: #67c2f1;
-  --accent-strong: #93d8fb;
-  --success: #5bc792;
-  --danger: #eb8598;
-  --shadow: 0 22px 60px rgba(0, 0, 0, 0.26);
-  --shadow-soft: 0 10px 24px rgba(0, 0, 0, 0.18);
-  --pastel-blue: #0d2030;
-  --pastel-green: #0d2318;
-  --pastel-lavender: #1a1328;
-  --pastel-peach: #271c0d;
-  --navy-hero: #091520;
-  --navy-hero-mid: #0f2233;
+  --bg: #0a1420;
+  --surface: #13212f;
+  --surface-soft: #18293a;
+  --surface-muted: #101c28;
+  --line: rgba(170, 200, 224, 0.10);
+  --line-strong: rgba(170, 200, 224, 0.18);
+  --text: #e8f1f9;
+  --muted: #8fa3b6;
+  --muted-strong: #b7c9d8;
+  --accent: #7eb8e8;
+  --accent-strong: #a3cdf2;
+  --success: #6abf95;
+  --danger: #e08599;
+  --shadow: 0 22px 60px rgba(0, 0, 0, 0.32);
+  --shadow-soft: 0 10px 24px rgba(0, 0, 0, 0.20);
+  --pastel-blue: #13212f;
+  --pastel-green: #13212f;
+  --pastel-lavender: #13212f;
+  --pastel-peach: #13212f;
+  --navy-hero: #07101a;
+  --navy-hero-mid: #0c1a28;
 }
 
 * {
@@ -3613,3 +3613,264 @@ body.body-gen .site-header-tools {
     padding: 20px;
   }
 }
+
+/* ─────────────────────────────────────────────────────────────
+   DESIGN REFINEMENT LAYER · 2026-05
+   Editorial / sober tone — single accent, calmer shadows,
+   softer eyebrows, unified surfaces. Overrides only.
+   ───────────────────────────────────────────────────────────── */
+
+/* Softer eyebrows everywhere — less SHOUTY */
+[data-theme="dark"] .eyebrow,
+[data-theme="dark"] .home-overview-columns article span,
+[data-theme="dark"] .gen-stat-chip span {
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+
+/* Home overview cards — unified surface, single-color accent rail
+   instead of arbitrary blue/green/purple tinted backgrounds. */
+[data-theme="dark"] .home-overview-columns article {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 26px 24px;
+  position: relative;
+  transition: border-color 200ms ease, transform 200ms ease;
+}
+
+[data-theme="dark"] .home-overview-columns article::before {
+  content: "";
+  position: absolute;
+  left: 24px;
+  top: 26px;
+  width: 24px;
+  height: 1px;
+  background: var(--accent);
+  opacity: 0.7;
+}
+
+[data-theme="dark"] .home-overview-columns article:hover {
+  border-color: var(--line-strong);
+}
+
+[data-theme="dark"] .home-overview-columns article span,
+[data-theme="dark"] .home-overview-columns article:nth-child(1) span,
+[data-theme="dark"] .home-overview-columns article:nth-child(2) span,
+[data-theme="dark"] .home-overview-columns article:nth-child(3) span {
+  color: var(--muted);
+  padding-top: 10px; /* sit below the accent rail */
+}
+
+[data-theme="dark"] .home-overview-columns article strong {
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--text);
+}
+
+/* "How it flows" — drop the warm peach band, harmonize with rest */
+[data-theme="dark"] .home-flow {
+  background: transparent;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding-top: 56px;
+  padding-bottom: 56px;
+}
+
+[data-theme="dark"] .home-flow-row article {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+
+[data-theme="dark"] .home-flow-row article span {
+  color: var(--accent);
+  opacity: 0.4;
+  font-size: 2.4rem;
+  font-weight: 600;
+}
+
+[data-theme="dark"] .home-flow-row article strong {
+  font-weight: 600;
+  font-size: 1.02rem;
+}
+
+/* Reduce button glow — keep it tactile, drop the gaming feel */
+[data-theme="dark"] .btn-primary {
+  background: var(--accent);
+  color: #07101a;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.08) inset,
+              0 8px 20px rgba(126, 184, 232, 0.16);
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+[data-theme="dark"] .btn-primary:hover {
+  background: var(--accent-strong);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.12) inset,
+              0 10px 24px rgba(126, 184, 232, 0.22);
+}
+
+[data-theme="dark"] .home-hero .btn-primary {
+  box-shadow: 0 1px 0 rgba(255,255,255,0.08) inset,
+              0 10px 24px rgba(126, 184, 232, 0.18);
+}
+
+/* Hero — calmer surface, refined eyebrow */
+[data-theme="dark"] .home-hero {
+  background: linear-gradient(180deg, #07101a 0%, #0a1420 100%);
+}
+
+[data-theme="dark"] .home-hero .eyebrow {
+  color: rgba(232, 241, 249, 0.45);
+  font-weight: 500;
+}
+
+[data-theme="dark"] .home-hero h1 {
+  letter-spacing: -0.025em;
+}
+
+[data-theme="dark"] .home-hero .lede {
+  color: rgba(232, 241, 249, 0.72);
+  font-size: 1.04rem;
+  line-height: 1.6;
+  max-width: 36em;
+}
+
+/* Final CTA strip — flatter, less competing */
+[data-theme="dark"] .home-final {
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+}
+
+/* Generator: refined right-rail stat chips ─────────────────── */
+[data-theme="dark"] .gen-stat-chip {
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+[data-theme="dark"] .gen-stat-chip strong {
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--text);
+  font-family: "Libre Baskerville", Georgia, serif;
+  letter-spacing: -0.01em;
+}
+
+[data-theme="dark"] .gen-stat-chip span {
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+[data-theme="dark"] .gen-quality-denom {
+  color: var(--muted);
+  font-weight: 400;
+  font-family: "Source Sans 3", sans-serif;
+}
+
+/* Generator: template strip — more breathing room */
+[data-theme="dark"] .gen-template-strip .template-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  transition: border-color 180ms ease, transform 180ms ease;
+}
+
+[data-theme="dark"] .gen-template-strip .template-card:hover {
+  border-color: var(--line-strong);
+  transform: translateY(-1px);
+}
+
+[data-theme="dark"] .gen-template-strip .template-card.active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent) inset;
+}
+
+[data-theme="dark"] .gen-template-strip .template-card__eyebrow {
+  color: var(--muted);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+}
+
+[data-theme="dark"] .gen-template-row.template-band {
+  background: var(--surface) !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 14px;
+  box-shadow: none !important;
+}
+
+[data-theme="dark"] .gen-template-row {
+  background: var(--surface) !important;
+  border: 1px solid var(--line) !important;
+  box-shadow: none !important;
+}
+
+/* Generator workspace headers — softer caps */
+[data-theme="dark"] .gen-workspace .eyebrow,
+[data-theme="dark"] .workspace-section-header,
+[data-theme="dark"] label.field-label,
+[data-theme="dark"] .field-eyebrow {
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+
+/* Sidebar — flatter, more refined */
+[data-theme="dark"] .workspace-side,
+[data-theme="dark"] .gen-side {
+  background: transparent;
+  border-right: 1px solid var(--line);
+}
+
+[data-theme="dark"] .workspace-side .nav-link.active,
+[data-theme="dark"] .gen-side .nav-link.active {
+  background: var(--surface);
+  border-color: var(--line);
+}
+
+/* Inputs / textarea — sit on surface, accent on focus only */
+[data-theme="dark"] input[type="text"],
+[data-theme="dark"] input[type="number"],
+[data-theme="dark"] textarea,
+[data-theme="dark"] select {
+  background: var(--surface-muted);
+  border: 1px solid var(--line);
+  color: var(--text);
+  border-radius: 10px;
+  transition: border-color 160ms ease, background-color 160ms ease;
+}
+
+[data-theme="dark"] input[type="text"]:focus,
+[data-theme="dark"] input[type="number"]:focus,
+[data-theme="dark"] textarea:focus,
+[data-theme="dark"] select:focus {
+  border-color: var(--accent);
+  outline: none;
+  background: var(--surface);
+}
+
+/* Recent Guides panel — empty state should feel calm, not alarming */
+[data-theme="dark"] .gen-right-col .history-summary-panel {
+  background: transparent;
+  border: 1px dashed var(--line);
+  border-radius: 12px;
+}
+
+/* Subtle decorative orbs in hero — dim them down */
+[data-theme="dark"] .home-hero-wrap::before,
+[data-theme="dark"] .home-hero-wrap::after {
+  opacity: 0.35;
+  filter: blur(2px);
+}
+
+/* Selection color matched to refined accent */
+[data-theme="dark"] body ::selection {
+  background: rgba(126, 184, 232, 0.22);
+}
+
