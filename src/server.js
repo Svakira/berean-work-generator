@@ -564,6 +564,7 @@ export function createServerApp() {
         bereanReflectionPrompt: localFallback.bereanReflectionPrompt
       },
       scholarData,
+      bereanAnswer: bereanData?.answer || "",
       pastoralData
     });
 

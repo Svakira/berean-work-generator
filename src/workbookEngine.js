@@ -144,8 +144,22 @@ function sanitizeGeneratedText(text) {
     .trim();
 }
 
-function normalizeQuotes(text) {
-  return String(text || "")
+/**
+ * Extract a brief scholar note (2-3 sentences) from Berean's answer text.
+ * Strips common AI preamble and returns just the academic content.
+ * Returns empty string if bereanAnswer is falsy or too short.
+ */
+function extractScholarNote(bereanAnswer) {
+  if (!bereanAnswer || bereanAnswer.length < 50) return "";
+  let text = String(bereanAnswer)
+    .replace(/^(Based on|According to|The|In the|From|Looking at)[^.]+\.\s*/i, "")
+    .replace(/^(I can|I will|Here are|Here is)[^.]+\.\s*/i, "")
+    .trim();
+  const sentences = text.match(/[^.!?]+[.!?]+/g) || [];
+  return sentences.slice(0, 3).join(" ").trim();
+}
+
+function normalizeQuotes(text) {  return String(text || "")
     .replace(/\s*"\s*/g, '"')
     .replace(/([a-zA-Z])"([a-zA-Z])/g, '$1 "$2')
     .replace(/([.!?])([A-Z])/g, '$1 $2')
@@ -516,6 +530,7 @@ export function buildWorkbook({
   teacherPlan,
   intent,
   scholarData,
+  bereanAnswer,
   pastoralData
 }) {
   const scholarAnswer = sanitizeGeneratedText(scholarData?.answer || "No academic response was returned.");
@@ -715,6 +730,12 @@ export function buildWorkbook({
           sanitizeGeneratedText(scholarAnswer)
         ].join("\n")
       },
+      ...(extractScholarNote(bereanAnswer) ? [{
+        type: "scholar_note",
+        title: "Scholar Notes",
+        content: extractScholarNote(bereanAnswer),
+        display: "callout"
+      }] : []),
       {
         type: "study_intro",
         title: "1. Why does this matter?",
