@@ -1,14 +1,16 @@
 /**
  * qwenClient.js
- * Client for TotalGPT API — Sao10K-72B-Qwen2.5-Kunou model (non-thinking)
+ * Client for TotalGPT API — Qwen3.6-35B-A3B (thinking model, MoE)
  *
  * ARCHITECTURE:
- * - Uses Qwen2.5-72B fine-tune with no thinking mode. Direct completions output.
- * - Prompt structure: direct pastoral instruction, strict second-person, 5-paragraph OIA framework.
+ * - Qwen3.6-35B is a thinking model: it wraps its reasoning in <think>...</think> tags.
+ * - stripThinking() removes the <think> block so only the final content reaches the user.
+ * - max_tokens must be high (6000) to give the model enough room to finish thinking
+ *   and then produce the full reading passage (~500-600 words of actual content).
  */
 
 const TOTALGPT_API_URL = "https://api.totalgpt.ai/v1/completions";
-const TOTALGPT_MODEL = "Sao10K-72B-Qwen2.5-Kunou-v1-FP8-Dynamic";
+const TOTALGPT_MODEL = "Qwen-Qwen3.6-35B-A3B";
 
 // Known section openers — used to find where real content starts
 const SECTION_OPENERS = [
@@ -24,7 +26,7 @@ const SECTION_OPENERS = [
 /**
  * Strip all thinking artifacts from Qwen3 output.
  * The model outputs thinking in 3 forms:
- *   1. <think>...</think> XML tags
+ *   1. <think>...</think> XML tags (closed or unclosed when token limit hit)
  *   2. Plain-text reasoning ("Okay, let's...", "I need to...")
  *   3. Instruction echoing ("Please write in English...", "Do not use...")
  * We also handle JSON wrapping ({"content": "..."}) that appears occasionally.
@@ -32,8 +34,43 @@ const SECTION_OPENERS = [
 function stripThinking(text) {
   let cleaned = String(text || "");
 
-  // 1. Remove <think>...</think> blocks
-  cleaned = cleaned.replace(/<think>[\s\S]*?<\/think>/gi, "").trim();
+  // 1. Handle <think> blocks
+  if (/<\/think>/i.test(cleaned)) {
+    // Closed properly — strip the whole block, use what's after
+    cleaned = cleaned.replace(/<think>[\s\S]*?<\/think>/gi, "").trim();
+  } else if (/<think>/i.test(cleaned)) {
+    // Unclosed — token limit cut off before </think> closed.
+    // The model drafts the actual passage inside <think>; extract it.
+    const thinkStart = cleaned.toLowerCase().indexOf("<think>");
+    const innerThink = cleaned.slice(thinkStart + 7);
+
+    // Try CONTENT_START marker inside the thinking block
+    const csIdx = innerThink.indexOf("CONTENT_START");
+    if (csIdx !== -1) {
+      cleaned = innerThink.slice(csIdx + "CONTENT_START".length).trim();
+    } else {
+      // Try finding a known section opener inside the thinking block
+      let earliestIdx = -1;
+      for (const pattern of SECTION_OPENERS) {
+        const match = innerThink.match(pattern);
+        if (match && match.index !== undefined) {
+          if (earliestIdx === -1 || match.index < earliestIdx) {
+            earliestIdx = match.index;
+          }
+        }
+      }
+      if (earliestIdx !== -1) {
+        cleaned = innerThink.slice(earliestIdx).trim();
+      } else {
+        // Last resort: take the last 2500 chars of the thinking block.
+        // By the end the model is usually writing its final draft prose.
+        const tail = innerThink.slice(-2500).trim();
+        // Skip any incomplete sentence at the very start
+        const firstPeriod = tail.indexOf(". ");
+        cleaned = (firstPeriod > 0 && firstPeriod < 300) ? tail.slice(firstPeriod + 2).trim() : tail;
+      }
+    }
+  }
 
   // 2. Unwrap JSON {"content": "..."} if model wrapped output
   const jsonMatch = cleaned.match(/^\{["']?content["']?\s*:\s*["']([\s\S]+?)["']\s*\}\s*$/m);
@@ -112,7 +149,9 @@ Write the passage directly. No preamble.
 CONTENT_START`;
   }
 
-  return `You are a warm, biblically grounded pastoral educator writing directly to ${audienceNote}.
+  return `/no_think
+
+You are a warm, biblically grounded pastoral educator writing directly to ${audienceNote}.
 
 Write a 5-paragraph biblical reading passage on: ${theme}
 ${coachAdditions ? `Pastoral guidance: ${coachAdditions}` : ""}
@@ -165,7 +204,7 @@ export async function generateStudyContent(params) {
     body: JSON.stringify({
       model: TOTALGPT_MODEL,
       prompt,
-      max_tokens: 1200,
+      max_tokens: 6000,
       temperature: 0.7,
       stop: null
     })
